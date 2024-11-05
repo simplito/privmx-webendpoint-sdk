@@ -58,7 +58,7 @@ This will ensure the library functions correctly and maintain security.
 The steps above can be handled automatically, using our setup npx script:
 
 ```
-npx @simplito/privmx-endpoint-web-sdk
+npx privmx-webendpoint-sdk
 ```
 
 ## Documentation
@@ -130,11 +130,11 @@ To create client app, you need Node and npm installed on your machine.
 
    Inside the created project folder, install this Endpoint Web SDK:
    ```shell
-   npm i @simplito/privmx-endpoint-web-sdk@latest --registry=https://npm.simplito.com
+   npm i @simplito/privmx-webendpoint-sdk@latest 
    ```
    After the installation, run setup script provided by the SDK:
    ```shell
-   npx @simplito/privmx-endpoint-web-sdk
+   npx webendpoint-manager
    ``` 
    Follow the steps displayed in your terminal.
 
@@ -144,27 +144,25 @@ To create client app, you need Node and npm installed on your machine.
    ```ts
     async function connectToBridge() {
         const connection = await Endpoint.connect({
-            platformUrl:"PLATFORM_URL",
+            bridgeUrl:"BRIDGE_URL",
             solutionId:"SOLUTION_ID",
             privKey:"USER_PRIVATE_KEY",
         })
-
-        const context = connection.context("CONTEXT_ID")
 
         const firstUser = {
             userId:"USER_ID",
             pubKey:"USER_PUBLIC_KEY",
         }
 
-        const threadId = await context.threads.new({
+        const threadId = await connection.threads.new({
             users:[firstUser],
             managers:[firstUser]
         })
 
-        await context.thread(threadId).sendMessage({
+        await connection.thread(threadId).sendMessage({
             data:new TextEncoder().encode("Hello Bridge!")
         })
-        const messageList = await context.thread(threadId).getMessages(0)
+        const messageList = await connection.thread(threadId).getMessages(0)
 
         const decodedMessageList = messageList.readItems.map(message => {
             return {
@@ -182,12 +180,11 @@ To create client app, you need Node and npm installed on your machine.
 
    ```ts
    const connection = await Endpoint.connect({
-        platformUrl:"PLATFORM_URL",
+        bridgeUrl:"PLATFORM_URL",
         solutionId:"SOLUTION_ID",
         privKey:"USER_PRIVATE_KEY",
    })
 
-   const context = connection.context("CONTEXT_ID")
    ``` 
    When connected, you have access to all SDK methods. This example shows how to create a Thread, send and download
    a message.
@@ -199,7 +196,7 @@ To create client app, you need Node and npm installed on your machine.
         userId:"USER_ID",
         pubKey:"USER_PUBLIC_KEY",
    }
-   const threadId = await context.threads.new({
+   const threadId = await connection.threads.new({
         users:[firstUser],
         managers:[firstUser]
    })
@@ -210,7 +207,7 @@ To create client app, you need Node and npm installed on your machine.
    binary (e.g. the usage of `TextEncoder` for string encoding).
 
    ```ts
-   await context.thread(threadId).sendMessage({
+   await connection.thread(threadId).sendMessage({
         data:new TextEncoder().encode("Hello Bridge!") 
    })
    ```
@@ -221,7 +218,7 @@ To create client app, you need Node and npm installed on your machine.
    **Endpoint takes care of encrypting your data before sending it to PrivMX Bridge.**
 
    ```ts
-   const messageList = await context.thread(threadId).getMessages()
+   const messageList = await connection.thread(threadId).getMessages()
 
    const decodedMessageList = messageList.readItems.map(message => {
         return {
