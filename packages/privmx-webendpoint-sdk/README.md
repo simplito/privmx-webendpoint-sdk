@@ -58,7 +58,7 @@ This will ensure the library functions correctly and maintain security.
 The steps above can be handled automatically, using our setup npx script:
 
 ```
-npx @simplito/privmx-endpoint-web-sdk
+npx webendpoint-manager
 ```
 
 ## Documentation
