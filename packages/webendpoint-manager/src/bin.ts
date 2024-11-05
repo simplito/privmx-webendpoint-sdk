@@ -34,13 +34,14 @@ const fetchInternalRepository: AssetFetcher = async (version: string, saveTo: st
     if (resp.ok && resp.body) {
         let writer = createWriteStream(savedFilePath);
         Readable.fromWeb(resp.body as any).pipe(writer);
+
     }
     while (true) {
         if (existsSync(savedFilePath)) {
             break;
         }
         await new Promise((resolve, reject) => {
-            setTimeout(resolve, 100);
+
         });
     }
     return savedFilePath;
@@ -51,19 +52,17 @@ const fetchGithubRepository: AssetFetcher = async (version, saveTo) => {
     const versionName = version.startsWith('v') ? version : `v${version}`
     const link = `https://github.com/simplito/privmx-webendpoint/releases/download/${versionName}/privmx-webendpoint-${versionName}.zip`
     const fileName = link.split('/').pop() || 'wasm-assets.zip';
-    const resp = await fetch(link);
+    const resp = await fetch(link,{redirect:"follow"});
     const savedFilePath = join(saveTo, fileName);
     if (resp.ok && resp.body) {
         let writer = createWriteStream(savedFilePath);
         Readable.fromWeb(resp.body as any).pipe(writer);
-    }
-    while (true) {
-        if (existsSync(savedFilePath)) {
-            break;
-        }
         await new Promise((resolve, reject) => {
-            setTimeout(resolve, 100);
+            writer.on("finish",resolve)
+            writer.on("error",reject)
         });
+    }else{
+        throw new Error('Unable to download assets aborting.');
     }
     return savedFilePath;
 }
@@ -301,14 +300,19 @@ async function main() {
         fetcher = fetchGithubRepository;
     }
 
-    const fetchedAsset = await fetcher(version, './');
+    try{
+        const fetchedAsset = await fetcher(version, './');
+        spinner.text = 'Extracting...';
+        await extractAssets(fetchedAsset, destFolder);
+        await clearArchive(fetchedAsset);
+        spinner.succeed(`Assets fetched to: ${destFolder}`);
+        await userProjectType.setup(destFolder);
+    }catch (e) {
+        spinner.fail(e.message || e);
+    }
 
     // extract assets
-    spinner.text = 'Extracting...';
-    await extractAssets(fetchedAsset, destFolder);
-    await clearArchive(fetchedAsset);
-    spinner.succeed(`Assets fetched to: ${destFolder}`);
-    await userProjectType.setup(destFolder);
+
 }
 
 main()
