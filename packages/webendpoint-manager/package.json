@@ -6,7 +6,8 @@
   "bin": "./dist/bin.js",
   "homepage": "https://privmx.dev/",
   "scripts": {
-    "build": "tsc --project tsconfig.cli.json"
+    "build": "tsc --project tsconfig.cli.json",
+    "build:clean": "rm -rd ./dist/* && pnpm build"
   },
   "keywords": ["encryption","secure-communication","crypto","privacy","secure-messaging","asymetric-encryption","web","cli"],
   "author": "Simplito sp. z o.o.",

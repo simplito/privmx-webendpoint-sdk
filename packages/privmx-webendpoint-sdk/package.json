@@ -20,11 +20,11 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "build:clean": "rm -rd ./dist* && npm run build",
+    "build:clean": "rm -rd ./dist/* && pnpm build",
     "lint:types": "tsc --project tsconfig.json --noEmit",
     "release": "pnpm build && pnpm publish",
     "release:local": "pnpm build && pnpm pack",
-    "release:clean": "rm -rd ./dist && npm run release",
+    "release:clean": "rm -rd ./dist && pnpm run release",
     "docs:json": "typedoc --excludeNotDocumented false --commentStyle all --json .doc/docs.json  ./src",
     "docs:parse-json": "npx tsx ./scripts/doc-gen.ts"
   },
