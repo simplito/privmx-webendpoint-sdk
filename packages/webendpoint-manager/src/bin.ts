@@ -319,7 +319,7 @@ async function main() {
     if (params.repository && params.repository.startsWith('https://builds.s24')) {
         fetcher = fetchInternalRepository;
     } else {
-        fetcher = fetchPublicRepository;
+        fetcher = fetchGithubRepository;
     }
 
     const fetchedAsset = await fetcher(version, './');

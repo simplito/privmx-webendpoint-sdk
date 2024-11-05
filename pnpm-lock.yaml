@@ -14,11 +14,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/privmx-webendpoint-sdk
 
-  examples/test-release:
+  examples/vite-project:
     dependencies:
       '@simplito/webendpoint-manager':
-        specifier: file:../../scripts/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz
-        version: file:scripts/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz
+        specifier: file:../../packages/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz
+        version: file:packages/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -72,26 +72,7 @@ importers:
         specifier: ^4.1.0
         version: 4.2.9(typedoc@0.26.10(typescript@5.6.3))
 
-  scripts/doc-scripts:
-    dependencies:
-      '@types/node':
-        specifier: ^22.8.5
-        version: 22.8.5
-    devDependencies:
-      jsdoc:
-        specifier: ^4.0.3
-        version: 4.0.4
-      tsx:
-        specifier: ^4.19.1
-        version: 4.19.2
-      typedoc:
-        specifier: ^0.26.2
-        version: 0.26.10(typescript@5.6.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.1.0
-        version: 4.2.9(typedoc@0.26.10(typescript@5.6.3))
-
-  scripts/webendpoint-manager:
+  packages/webendpoint-manager:
     dependencies:
       '@inquirer/prompts':
         specifier: ^6.0.1
@@ -115,6 +96,25 @@ importers:
       tsx:
         specifier: ^4.19.1
         version: 4.19.2
+
+  scripts/doc-scripts:
+    dependencies:
+      '@types/node':
+        specifier: ^22.8.5
+        version: 22.8.5
+    devDependencies:
+      jsdoc:
+        specifier: ^4.0.3
+        version: 4.0.4
+      tsx:
+        specifier: ^4.19.1
+        version: 4.19.2
+      typedoc:
+        specifier: ^0.26.2
+        version: 0.26.10(typescript@5.6.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.1.0
+        version: 4.2.9(typedoc@0.26.10(typescript@5.6.3))
 
 packages:
 
@@ -648,8 +648,8 @@ packages:
   '@shikijs/vscode-textmate@9.3.0':
     resolution: {integrity: sha512-jn7/7ky30idSkd/O5yDBfAnVt+JJpepofP/POZ1iMOxK59cOfqIgg/Dj0eFsjOTMw+4ycJN0uhZH/Eb0bs/EUA==}
 
-  '@simplito/webendpoint-manager@file:scripts/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz':
-    resolution: {integrity: sha512-taoHI2gegk8w9HLo/DgXlKX2j8+xUzEJ/bF405eJ1C3R8QJTOUc09ZF8Po2rGhVCyY8QaA2zAPGA/hrwx7gk9g==, tarball: file:scripts/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz}
+  '@simplito/webendpoint-manager@file:packages/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz':
+    resolution: {integrity: sha512-wHtSRfkClh8ptXH6XFCRGJRwu4KN027zWGtJPrAXm90eH/m1coFMNw9laOu6tq+sftlNS4Ild7ufrEoG1IzNXg==, tarball: file:packages/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz}
     version: 0.1.0
     hasBin: true
 
@@ -2209,7 +2209,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@9.3.0': {}
 
-  '@simplito/webendpoint-manager@file:scripts/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz':
+  '@simplito/webendpoint-manager@file:packages/webendpoint-manager/simplito-webendpoint-manager-0.1.0.tgz':
     dependencies:
       '@inquirer/prompts': 6.0.1
       '@types/adm-zip': 0.5.6
