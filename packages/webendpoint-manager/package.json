@@ -2,6 +2,7 @@
   "name": "@simplito/webendpoint-manager",
   "version": "0.1.0",
   "description": "ClI tool for managing PrivMX Webendpoint assets",
+  "private": "false",
   "type": "module",
   "bin": "./dist/bin.js",
   "homepage": "https://privmx.dev/",
