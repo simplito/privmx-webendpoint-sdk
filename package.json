@@ -7,7 +7,7 @@
     "build": "pnpm -r build",
     "doc:typedoc": "pnpm --filter='privmx-webendpoint-sdk' docs:json",
     "doc:parse-typedoc": "pnpm --filter='doc-scripts' docs:parse-json",
-    "release": "pnpm --filter='./packages/*' build && pnpm --filter='./packages/*' build:clean && pnpm --filter='./packages/*' publish"
+    "release": "pnpm --filter='./packages/*' build && pnpm --filter='./packages/*' build:clean && pnpm --filter='./packages/*' publish --access public"
   },
   "keywords": [],
   "author": "Simplito s.p z.o o.",
