@@ -1,0 +1,22 @@
+{
+  "name": "doc-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "docs:parse-json": "npx tsx ./doc-gen.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^4.0.3",
+    "typedoc": "^0.26.2",
+    "typedoc-plugin-markdown": "^4.1.0",
+    "tsx": "^4.19.1"
+  },
+  "dependencies": {
+    "@types/node": "^22.8.5"
+  }
+}

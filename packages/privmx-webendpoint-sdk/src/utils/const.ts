@@ -1,0 +1,1 @@
+export const FILE_MAX_CHUNK_SIZE = 1048576;

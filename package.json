@@ -1,0 +1,14 @@
+{
+  "name": "root",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "Monorepo for projects related to PrivMX Webendpoint SDK",
+  "scripts": {
+    "build": "pnpm -r build",
+    "doc:typedoc": "pnpm --filter='privmx-webendpoint-sdk' docs:json",
+    "doc:parse-typedoc": "pnpm --filter='doc-scripts' docs:parse-json"
+  },
+  "keywords": [],
+  "author": "Simplito s.p z.o o.",
+  "license": "MIT"
+}

@@ -1,0 +1,17 @@
+**/dist
+**/.doc
+/dist-type
+**/node_modules
+**/.gitlab-ci.yml
+**/out.json
+/docs
+/.idea
+
+
+
+/example
+
+/.vscode
+
+*.tgz
+.
