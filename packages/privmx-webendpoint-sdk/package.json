@@ -1,7 +1,7 @@
 {
   "name": "@simplito/privmx-webendpoint-sdk",
   "description": "Set of Typescript/Javascript tools for working with Privmx Webendpoint",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "homepage": "https://privmx.dev/",
   "author": "Simplito sp. z o.o.",
