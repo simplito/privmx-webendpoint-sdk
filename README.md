@@ -1,8 +1,8 @@
-# PrivMX Endpoint Web SDK
+# PrivMX Web Endpoint SDK
 
 ## Overview
 
-PrivMX Endpoint Web SDK is a set of TypeScript/JavaScript tools that simplify working with PrivMX Bridge in Web
+PrivMX Web Endpoint SDK is a set of TypeScript/JavaScript tools that simplify working with PrivMX Bridge in Web
 environments.
 It consists of:
 
