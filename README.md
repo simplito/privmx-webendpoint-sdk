@@ -239,4 +239,4 @@ To create client app, you need Node and npm installed on your machine.
 
 ## License
 
-[MIT](./packages/privmx-webendpoint-sdk/LICENSE)
+[MIT](./LICENSE)
