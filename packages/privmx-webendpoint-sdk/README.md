@@ -58,7 +58,7 @@ This will ensure the library functions correctly and maintain security.
 The steps above can be handled automatically, using our setup npx script:
 
 ```
-npx webendpoint-manager
+npx @simplito/webendpoint-manager
 ```
 
 ## Documentation
@@ -134,7 +134,7 @@ npm i @simplito/privmx-webendpoint-sdk@latest
    ```
 After the installation, run setup script provided by the SDK:
 ```shell
-npx webendpoint-manager
+npx @simplito/webendpoint-manager
    ```
 Follow the steps displayed in your terminal.
 
