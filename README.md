@@ -123,12 +123,12 @@ To create client app, you need Node and npm installed on your machine.
    ```shell
    npm create vite
    ```
-   Follow all the steps displayed by Vite CLI. You can choose any framework you prefer - PrivMX Endpoint Web SDK is
+   Follow all the steps displayed by Vite CLI. You can choose any framework you prefer - PrivMX Web Endpoint SDK is
    framework-agnostic.
 
 2. **Install dependencies**
 
-   Inside the created project folder, install this Endpoint Web SDK:
+   Inside the created project folder, install this Web Endpoint SDK:
    ```shell
    npm i @simplito/privmx-endpoint-web-sdk@latest --registry=https://npm.simplito.com
    ```
