@@ -120,122 +120,119 @@ To create a PrivMX Bridge Instance, you need Docker with Docker Compose installe
 To create client app, you need Node and npm installed on your machine.
 
 1. **Create app using Vite CLI**:
-   ```shell
-   npm create vite
+```shell
+npm create vite
    ```
-   Follow all the steps displayed by Vite CLI. You can choose any framework you prefer - PrivMX Web Endpoint SDK is
-   framework-agnostic.
+Follow all the steps displayed by Vite CLI. You can choose any framework you prefer - PrivMX Endpoint Web SDK is
+framework-agnostic.
 
 2. **Install dependencies**
 
-   Inside the created project folder, install this Web Endpoint SDK:
-   ```shell
-   npm i @simplito/privmx-endpoint-web-sdk@latest --registry=https://npm.simplito.com
+Inside the created project folder, install this Endpoint Web SDK:
+```shell
+npm i @simplito/privmx-webendpoint-sdk@latest
    ```
-   After the installation, run setup script provided by the SDK:
-   ```shell
-   npx @simplito/privmx-endpoint-web-sdk
-   ``` 
-   Follow the steps displayed in your terminal.
+After the installation, run setup script provided by the SDK:
+```shell
+npx webendpoint-manager
+   ```
+Follow the steps displayed in your terminal.
 
 3. **Connect to your Bridge Instance**
 
-   Paste the following snippet to your main JavaScript file (e.g. `./src/App.ts` or `./src/index.js`):
-   ```ts
-    async function connectToBridge() {
-        const connection = await Endpoint.connect({
-            platformUrl:"PLATFORM_URL",
-            solutionId:"SOLUTION_ID",
-            privKey:"USER_PRIVATE_KEY",
-        })
+Paste the following snippet to your main JavaScript file (e.g. `./src/App.ts` or `./src/index.js`):
+```ts
+ async function connectToBridge() {
+     const connection = await Endpoint.connect({
+         bridgeUrl:"BRIDGE_URL",
+         solutionId:"SOLUTION_ID",
+         privKey:"USER_PRIVATE_KEY",
+     })
 
-        const context = connection.context("CONTEXT_ID")
+     const firstUser = {
+         userId:"USER_ID",
+         pubKey:"USER_PUBLIC_KEY",
+     }
 
-        const firstUser = {
-            userId:"USER_ID",
-            pubKey:"USER_PUBLIC_KEY",
-        }
+     const threadId = await connection.threads.new({
+         users:[firstUser],
+         managers:[firstUser]
+     })
 
-        const threadId = await context.threads.new({
-            users:[firstUser],
-            managers:[firstUser]
-        })
+     await connection.thread(threadId).sendMessage({
+         data:new TextEncoder().encode("Hello Bridge!")
+     })
+     const messageList = await connection.thread(threadId).getMessages(0)
 
-        await context.thread(threadId).sendMessage({
-            data:new TextEncoder().encode("Hello Bridge!")
-        })
-        const messageList = await context.thread(threadId).getMessages(0)
-
-        const decodedMessageList = messageList.readItems.map(message => {
-            return {
-                data:new TextDecoder().decode(message.data),
-                info:message.info,
-                authorPubKey:message.authorPubKey,
-            }
-        })
-        console.log(decodedMessageList)
-   }
+     const decodedMessageList = messageList.readItems.map(message => {
+         return {
+             data:new TextDecoder().decode(message.data),
+             info:message.info,
+             authorPubKey:message.authorPubKey,
+         }
+     })
+     console.log(decodedMessageList)
+}
    ```
-   First, you have to connect to your Bridge Instance using `Platform.connect` method. It requires the API keys
-   generated
-   while initializing your local instance earlier.
+First, you have to connect to your Bridge Instance using `Endpoint.connect` method. It requires the API keys
+generated
+while initializing your local instance earlier.
 
-   ```ts
-   const connection = await Endpoint.connect({
-        platformUrl:"PLATFORM_URL",
-        solutionId:"SOLUTION_ID",
-        privKey:"USER_PRIVATE_KEY",
-   })
+```ts
+const connection = await Endpoint.connect({
+         bridgeUrl:"BRIDGE_URL",
+         solutionId:"SOLUTION_ID",
+         privKey:"USER_PRIVATE_KEY",
+})
+```
+When connected, you have access to all SDK methods. This example shows how to create a Thread, send and download
+a message.
+To create a Thread inside Context, use Threads handle methods `new`. Note that you have to pass user ID - public key
+pair to make a list of users and managers.
 
-   const context = connection.context("CONTEXT_ID")
-   ``` 
-   When connected, you have access to all SDK methods. This example shows how to create a Thread, send and download
-   a message.
-   To create a Thread inside Context, use Threads handle methods `new`. Note that you have to pass user ID - public key
-   pair to make a list of users and managers.
+```ts
+ const firstUser = {
+         userId:"USER_ID",
+         pubKey:"USER_PUBLIC_KEY",
+     }
 
-   ```ts
-   const firstUser = { 
-        userId:"USER_ID",
-        pubKey:"USER_PUBLIC_KEY",
-   }
-   const threadId = await context.threads.new({
-        users:[firstUser],
-        managers:[firstUser]
-   })
-   ```
-   With the Thread created, you can now send the first message.
+     const threadId = await connection.threads.new({
+         users:[firstUser],
+         managers:[firstUser]
+     })
+```
+With the Thread created, you can now send the first message.
 
-   > Endpoint sends data in `Uint8Array` format. It requires encoding your data from string or object format to
-   binary (e.g. the usage of `TextEncoder` for string encoding).
+> Endpoint sends data in `Uint8Array` format. It requires encoding your data from string or object format to
+binary (e.g. the usage of `TextEncoder` for string encoding).
 
-   ```ts
-   await context.thread(threadId).sendMessage({
-        data:new TextEncoder().encode("Hello Bridge!") 
-   })
-   ```
+```ts
+await connection.thread(threadId).sendMessage({
+    data:new TextEncoder().encode("Hello Bridge!")
+})
+```
 
-   To get a list of messages inside a Thread, use `getMessages` method. Because data inside messages is in Uint8Array
-   you
-   have to deserialize it to human-readable string.
-   **Endpoint takes care of encrypting your data before sending it to PrivMX Bridge.**
+To get a list of messages inside a Thread, use `getMessages` method. Because data inside messages is in Uint8Array
+you
+have to deserialize it to human-readable string.
+**Endpoint takes care of encrypting your data before sending it to PrivMX Bridge.**
 
-   ```ts
-   const messageList = await context.thread(threadId).getMessages()
+```ts
+   const messageList = await connection.thread(threadId).getMessages(0)
 
-   const decodedMessageList = messageList.readItems.map(message => {
-        return {
-            data:new TextDecoder().decode(message.data),
-            info:message.info,
-            authorPubKey:message.authorPubKey,
-        }
-   })
-   console.log(decodedMessageList)
-   ```
+     const decodedMessageList = messageList.readItems.map(message => {
+         return {
+             data:new TextDecoder().decode(message.data),
+             info:message.info,
+             authorPubKey:message.authorPubKey,
+         }
+     })
+     console.log(decodedMessageList)
+```
 
 4. **Run your app**
 
-   In your terminal, run `npm run dev` to start local app server.
+In your terminal, run `npm run dev` to start local app server.
 
 ## License
 
