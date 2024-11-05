@@ -3,6 +3,7 @@
   "description": "Set of Typescript/Javascript tools for working with Privmx Webendpoint",
   "version": "2.0.2",
   "type": "module",
+  "license": "MIT",
   "homepage": "https://privmx.dev/",
   "author": "Simplito sp. z o.o.",
   "repository": "https://github.com/simplito/privmx-webendpoint-sdk",
