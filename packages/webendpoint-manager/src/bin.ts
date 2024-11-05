@@ -46,26 +46,6 @@ const fetchInternalRepository: AssetFetcher = async (version: string, saveTo: st
     return savedFilePath;
 };
 
-const fetchPublicRepository: AssetFetcher = async (version, saveTo) => {
-    const versionName = version.startsWith('v') ? version : `v${version}`
-    const link = `https://builds.simplito.com/web/main/privmx-webendpoint-${versionName}.zip`;
-    const fileName = link.split('/').pop() || 'wasm-assets.zip';
-    const resp = await fetch(link);
-    const savedFilePath = join(saveTo, fileName);
-    if (resp.ok && resp.body) {
-        let writer = createWriteStream(savedFilePath);
-        Readable.fromWeb(resp.body as any).pipe(writer);
-    }
-    while (true) {
-        if (existsSync(savedFilePath)) {
-            break;
-        }
-        await new Promise((resolve, reject) => {
-            setTimeout(resolve, 100);
-        });
-    }
-    return savedFilePath;
-};
 
 const fetchGithubRepository: AssetFetcher = async (version, saveTo) => {
     const versionName = version.startsWith('v') ? version : `v${version}`
@@ -314,7 +294,6 @@ async function main() {
 
     // fetch assets
     let fetcher: AssetFetcher;
-    console.log("Webendpoint manager")
     const spinner = ora(`Fetching assets version ${version}`).start();
     if (params.repository && params.repository.startsWith('https://builds.s24')) {
         fetcher = fetchInternalRepository;
