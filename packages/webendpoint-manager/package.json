@@ -1,6 +1,6 @@
 {
-  "name": "test-npx-install",
-  "version": "1.0.21",
+  "name": "@simplito/webendpoint-manager",
+  "version": "0.1.2",
   "description": "ClI tool for managing PrivMX Webendpoint assets",
   "type": "module",
   "bin": "./dist/bin.js",
