@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import { confirm, input } from '@inquirer/prompts';
-import { join } from 'node:path';
+import { join, resolve as pathResolve } from 'path';
 import { rm } from 'node:fs/promises';
-import { existsSync, readFileSync } from 'node:fs';
-import { createWriteStream } from 'fs';
+import { existsSync, readFileSync, createWriteStream, renameSync, mkdirSync, rmSync } from 'fs';
 import { Readable } from 'stream';
+import * as cp from "child_process";
+import * as UUID from "uuid";
 
 // @ts-ignore
 import AdmZip from 'adm-zip';
@@ -17,7 +18,12 @@ type ProjectType = {
     setup: (assetsPath: string) => Promise<void>
 }
 
-type AssetFetcher = (version: string, saveTo: string) => Promise<string>
+interface AssetResult {
+    path: string;
+    isCompressed: boolean;
+    cleanup?: Function;
+}
+type AssetFetcher = (version: string, saveTo: string) => Promise<AssetResult>
 
 async function pressEnterToContinue() {
     await input({
@@ -26,34 +32,32 @@ async function pressEnterToContinue() {
 }
 
 
-const fetchInternalRepository: AssetFetcher = async (version: string, saveTo: string) => {
-    const link = `https://builds.s24.simplito.com/web/main/privmx-webendpoint-${version}.zip`;
-    const fileName = link.split('/').pop() || 'wasm-assets.zip';
-    const resp = await fetch(link);
-    const savedFilePath = join(saveTo, fileName);
-    if (resp.ok && resp.body) {
-        let writer = createWriteStream(savedFilePath);
-        Readable.fromWeb(resp.body as any).pipe(writer);
+async function getZipUrlOfLatest() {
+    const latestInfoUrl = "https://api.github.com/repos/simplito/privmx-webendpoint/releases/latest";
+    const headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
 
+    const zipInfo = await fetch(latestInfoUrl, {headers});
+    if (zipInfo.ok) {
+        return (await zipInfo.json()).zipball_url;  
     }
-    while (true) {
-        if (existsSync(savedFilePath)) {
-            break;
-        }
-        await new Promise((resolve, reject) => {
-
-        });
-    }
-    return savedFilePath;
-};
-
+    return null;
+}
 
 const fetchGithubRepository: AssetFetcher = async (version, saveTo) => {
-    const versionName = version.startsWith('v') ? version : `v${version}`
-    const link = `https://github.com/simplito/privmx-webendpoint/releases/download/${versionName}/privmx-webendpoint-${versionName}.zip`
+    const actualVersion = version ? version : (await getZipUrlOfLatest()).split("/").pop();
+    const versionName = actualVersion.startsWith('v') ? actualVersion : `v${actualVersion}`;
+    const link = `https://github.com/simplito/privmx-webendpoint/releases/download/${versionName}/privmx-webendpoint-${versionName}.zip`;
+                       
     const fileName = link.split('/').pop() || 'wasm-assets.zip';
     const resp = await fetch(link,{redirect:"follow"});
     const savedFilePath = join(saveTo, fileName);
+
+    if (existsSync(savedFilePath)) {
+        await rm(savedFilePath);
+    }
     if (resp.ok && resp.body) {
         let writer = createWriteStream(savedFilePath);
         Readable.fromWeb(resp.body as any).pipe(writer);
@@ -64,7 +68,33 @@ const fetchGithubRepository: AssetFetcher = async (version, saveTo) => {
     }else{
         throw new Error('Unable to download assets aborting.');
     }
-    return savedFilePath;
+    return {path: savedFilePath, isCompressed: true};
+}
+
+const fetchNpmJSPackage: AssetFetcher = async (version, saveTo) => {
+    const versionName = version.startsWith('v') ? version.substring(1) : version;
+    const pkgName = `@simplito/privmx-webendpoint${version.length > 0 ? "@" + versionName : ""}`;
+    
+    let tmpPkgDir: string = '';
+    while(true) {
+        tmpPkgDir = pathResolve(saveTo, "tmp-"+UUID.v4());
+        if (!existsSync(tmpPkgDir)) {
+            break;
+        }    
+    }
+    mkdirSync(tmpPkgDir, {recursive: true});
+
+    cp.execSync("npm init -y", {cwd: tmpPkgDir});
+
+    cp.execSync("npm i " + pkgName, {cwd: tmpPkgDir});
+    return {
+        path: pathResolve(tmpPkgDir, "node_modules/@simplito/privmx-webendpoint/webAssets"),
+        isCompressed: false,
+        cleanup: () => {
+            console.log("cleanup: ", tmpPkgDir);
+            rmSync(tmpPkgDir, {recursive: true, force: true});
+        }
+    };
 }
 
 async function extractAssets(archivePath: string, extractPath: string): Promise<void> {
@@ -280,7 +310,7 @@ async function main() {
 
     // get versions
     // select version
-    const version = params.version ?? 'v2.0.2';
+    const version = params.version ? params.version : "";
 
     // select folder
     const destFolder = await choseDestFolder();
@@ -293,18 +323,25 @@ async function main() {
 
     // fetch assets
     let fetcher: AssetFetcher;
-    const spinner = ora(`Fetching assets version ${version}`).start();
-    if (params.repository && params.repository.startsWith('https://builds.s24')) {
-        fetcher = fetchInternalRepository;
-    } else {
+    const spinner = ora(`Fetching assets of version: ${version.length > 0 ? version : "latest"}`).start();
+    if (params.repository && params.repository.startsWith('https://github.com/simplito')) {
         fetcher = fetchGithubRepository;
+    } else {
+        fetcher = fetchNpmJSPackage;
     }
 
     try{
         const fetchedAsset = await fetcher(version, './');
-        spinner.text = 'Extracting...';
-        await extractAssets(fetchedAsset, destFolder);
-        await clearArchive(fetchedAsset);
+        if (fetchedAsset.isCompressed) {
+            spinner.text = 'Extracting...';
+            await extractAssets(fetchedAsset.path, destFolder);
+            await clearArchive(fetchedAsset.path);    
+        } else {
+            renameSync(fetchedAsset.path, destFolder);
+            if (fetchedAsset.cleanup) {
+                fetchedAsset.cleanup();
+            }
+        }
         spinner.succeed(`Assets fetched to: ${destFolder}`);
         await userProjectType.setup(destFolder);
     }catch (e) {
