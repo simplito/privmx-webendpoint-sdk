@@ -91,7 +91,6 @@ const fetchNpmJSPackage: AssetFetcher = async (version, saveTo) => {
         path: pathResolve(tmpPkgDir, "node_modules/@simplito/privmx-webendpoint/webAssets"),
         isCompressed: false,
         cleanup: () => {
-            console.log("cleanup: ", tmpPkgDir);
             rmSync(tmpPkgDir, {recursive: true, force: true});
         }
     };
@@ -351,14 +350,13 @@ async function main() {
     // extract assets
 
 }
-
 main()
     .then(() => {
         console.log(
-            'For more information please visit our documentation: https://docs.privmx.cloud/'
+            'For more information please visit our documentation: https://docs.privmx.dev/'
         );
     })
     .catch((e) => {
-        console.log(e);
+        console.error(e);
         process.exit(1);
     });
