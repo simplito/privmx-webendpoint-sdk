@@ -6,4 +6,3 @@ export class ConnectionError extends Error {
         this.code = code;
     }
 }
-

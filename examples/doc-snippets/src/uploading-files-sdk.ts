@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { deserializeObject, Endpoint, serializeObject } from '@simplito/privmx-webendpoint-sdk';
 
 async function basicUpload() {
-
     const file = 'FILE_SELECTED_BY_USER'; // e.g. from a form (FormData.get('file'));
 
     const fileId = await Endpoint.connection().store('STORE_ID').uploadFile({
@@ -26,7 +27,11 @@ async function withMetaData() {
 
     const fileInfo = await Endpoint.connection().stores.getFileMetadata(fileId);
     const filePrivateMeta = deserializeObject(fileInfo.privateMeta);
-    const deserializedFile = { ...fileInfo, name: filePrivateMeta.name, mimetype: filePrivateMeta.mimetype };
+    const deserializedFile = {
+        ...fileInfo,
+        name: filePrivateMeta.name,
+        mimetype: filePrivateMeta.mimetype
+    };
 }
 
 async function listOfFiles() {
@@ -43,7 +48,7 @@ async function listOfFiles() {
 
     const fileList = await store.getFiles();
 
-    const parsedObjects = fileList.readItems.map(file => {
+    const parsedObjects = fileList.readItems.map((file) => {
         const fileMeta = deserializeObject(file.privateMeta);
         return {
             ...file,
@@ -56,7 +61,6 @@ async function listOfFiles() {
 // Modyfing files
 
 async function changingName() {
-
     const currentFileMeta = await Endpoint.connection().stores.getFileMetadata('FILE_ID');
 
     const deserializedFileMeta = deserializeObject(currentFileMeta.privateMeta);

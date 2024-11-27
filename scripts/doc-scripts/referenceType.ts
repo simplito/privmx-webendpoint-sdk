@@ -29,14 +29,14 @@ export enum DeclarationKind {
 }
 
 export interface TypeAlias {
-    id: string,
-    name: string,
-    variant: 'declaration',
-    comment: DeclarationComment,
-    kind: DeclarationKind.TypeAlias,
-    flags: DeclarationFlags,
-    sources: { fileName: string, line: number, character: number }[]
-    type: DeclarationParamType
+    id: string;
+    name: string;
+    variant: 'declaration';
+    comment: DeclarationComment;
+    kind: DeclarationKind.TypeAlias;
+    flags: DeclarationFlags;
+    sources: { fileName: string; line: number; character: number }[];
+    type: DeclarationParamType;
 }
 
 export type DeclarationFlags = {
@@ -52,48 +52,45 @@ type DeclarationSources = Array<{
 
 export type DeclarationParamType =
     | {
-    type: 'reference';
-    target: number | { sourceFileName: string; qualifiedName: string };
-    typeArguments: DeclarationParamType[];
-    name: string;
-    package: string;
-}
+          type: 'reference';
+          target: number | { sourceFileName: string; qualifiedName: string };
+          typeArguments: DeclarationParamType[];
+          name: string;
+          package: string;
+      }
     | { type: 'intrinsic'; name: string }
     | { type: 'array'; elementType: DeclarationParamType }
     | { type: 'union'; types: Exclude<DeclarationParamType, 'union'>[]; defaultData?: string }
     | {
-    type: 'reflection';
-    declaration: {
-        id: number;
-        name: '__type';
-        variant: 'declaration';
-        kind: DeclarationKind.TypeLiteral;
-        flags: DeclarationFlags;
-        children: PropertyDeclarationType[];
-    };
-}
+          type: 'reflection';
+          declaration: {
+              id: number;
+              name: '__type';
+              variant: 'declaration';
+              kind: DeclarationKind.TypeLiteral;
+              flags: DeclarationFlags;
+              children: PropertyDeclarationType[];
+          };
+      }
     | {
-    type: 'reflection';
-    declaration: {
-        id: number;
-        name: '__type',
-        variant: 'declaration',
-        kind: DeclarationKind.TypeLiteral;
-        flags: DeclarationFlags;
-        signatures: CallSignatureType[]
-    }
-}
+          type: 'reflection';
+          declaration: {
+              id: number;
+              name: '__type';
+              variant: 'declaration';
+              kind: DeclarationKind.TypeLiteral;
+              flags: DeclarationFlags;
+              signatures: CallSignatureType[];
+          };
+      }
     | {
-    type: 'intersection';
-    types: DeclarationParamType[]
-}
+          type: 'intersection';
+          types: DeclarationParamType[];
+      }
     | {
-    type: 'literal' | 'templateLiteral'
-    value: string
-}
-
-
-type T = DeclarationParamType['type']
+          type: 'literal' | 'templateLiteral';
+          value: string;
+      };
 
 export type DeclarationComment = {
     summary: {
@@ -185,24 +182,24 @@ export type AccessorDeclarationType = {
     sources: DeclarationSources;
 } & (
     | {
-    getSignature: {
-        id: number;
-        name: string;
-        comment?: DeclarationComment
-        variant: 'signature';
-        kind: DeclarationKind.GetSignature;
-        sources: DeclarationSources;
-        type: DeclarationParamType;
-    };
-}
+          getSignature: {
+              id: number;
+              name: string;
+              comment?: DeclarationComment;
+              variant: 'signature';
+              kind: DeclarationKind.GetSignature;
+              sources: DeclarationSources;
+              type: DeclarationParamType;
+          };
+      }
     | {
-    setSignature: {
-        name: string;
-        comment?: DeclarationComment
-        type: DeclarationParamType;
-    };
-}
-    );
+          setSignature: {
+              name: string;
+              comment?: DeclarationComment;
+              type: DeclarationParamType;
+          };
+      }
+);
 
 export interface ClassDeclarationType {
     id: number;

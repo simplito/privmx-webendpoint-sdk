@@ -1,14 +1,31 @@
 {
-  "name": "root",
-  "version": "1.0.0",
-  "description": "Monorepo for projects related to PrivMX Webendpoint SDK",
-  "scripts": {
-    "build": "pnpm -r build",
-    "doc:typedoc": "pnpm --filter='privmx-webendpoint-sdk' docs:json",
-    "doc:parse-typedoc": "pnpm --filter='doc-scripts' docs:parse-json",
-    "release": "pnpm --filter='./packages/*' build && pnpm --filter='./packages/*' build:clean && pnpm --filter='./packages/*' publish --access public"
-  },
-  "keywords": [],
-  "author": "Simplito s.p z.o o.",
-  "license": "MIT"
+    "name": "root",
+    "version": "1.0.0",
+    "description": "Monorepo for projects related to PrivMX Webendpoint SDK",
+    "scripts": {
+        "build": "pnpm -r build",
+        "doc:typedoc": "pnpm --filter='privmx-webendpoint-sdk' docs:json",
+        "doc:parse-typedoc": "pnpm --filter='doc-scripts' docs:parse-json",
+        "release": "pnpm --filter='./packages/*' build && pnpm --filter='./packages/*' build:clean && pnpm --filter='./packages/*' publish --access public",
+        "lint": "eslint . --fix .",
+        "format": "prettier --write .",
+        "lint-and-format": "pnpm lint && pnpm format"
+    },
+    "keywords": [],
+    "author": "Simplito s.p z.o o.",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^22.10.0",
+        "@typescript-eslint/eslint-plugin": "^8.16.0",
+        "@typescript-eslint/parser": "^8.16.0",
+        "eslint": "^9.15.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^7.2.1",
+        "prettier": "^3.4.1",
+        "typescript": "^5.6.3",
+        "typescript-eslint": "^8.16.0"
+    }
 }

@@ -1,4 +1,4 @@
-import { Message, PagingList, PagingQuery, SortOrder, Thread, UserWithPubKey } from '../../types';
+import { Message, PagingList, PagingQuery, Thread, UserWithPubKey } from '../../types';
 
 export interface ThreadApiInterface {
     /**

@@ -7,8 +7,7 @@ import { Endpoint } from './Endpoint';
  * Provides a wrapper for functions used in public connection ( created using `Endpoint.connectPublic).
  */
 export class PublicConnection {
-    constructor(private platform: Endpoint) {
-    }
+    constructor(private platform: Endpoint) {}
 
     /**
      * Sends data and optional files to an Inbox.

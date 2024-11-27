@@ -1,7 +1,20 @@
 import { ThreadApi } from '../api/thread/ThreadApi';
 import { EventDispatcher } from '../EventDispatcher';
-import { EndpointApiEvent, ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../types';
-import { Channel, EventsByChannel, SubscribeForChannel, ThreadEvents, ThreadMessageEvents } from '../types/events';
+import {
+    EndpointApiEvent,
+    ListOptions,
+    Message,
+    PagingList,
+    Thread,
+    UserWithPubKey
+} from '../types';
+import {
+    Channel,
+    EventsByChannel,
+    SubscribeForChannel,
+    ThreadEvents,
+    ThreadMessageEvents
+} from '../types/events';
 import { Endpoint } from './Endpoint';
 import { ThreadMessagePayload } from '../types/thread';
 

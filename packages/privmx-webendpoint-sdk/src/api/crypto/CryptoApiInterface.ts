@@ -49,7 +49,11 @@ export interface CryptoApiInterface {
      * @param {string} publicKey ECC key in BASE58DER format used to validate data
      * @return {boolean} validated data
      */
-    verifySignature: (data: Uint8Array, signature: Uint8Array, publicKey: string) => Promise<boolean>;
+    verifySignature: (
+        data: Uint8Array,
+        signature: Uint8Array,
+        publicKey: string
+    ) => Promise<boolean>;
 
     /**
      * Generates a new private ECC key from a password using pbkdf2.

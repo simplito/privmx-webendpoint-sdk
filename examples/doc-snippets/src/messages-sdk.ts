@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { deserializeObject, Endpoint, serializeObject } from '@simplito/privmx-webendpoint-sdk';
 
 async function serialization() {
-
     const data = {
         content: 'MESSAGE_CONTENT',
         type: 'text'
@@ -10,7 +11,6 @@ async function serialization() {
     const binaryData = serializeObject(data); // returns data encoded to Uint8Array
     const decodedData = deserializeObject(binaryData); // returns JavaScript object
 }
-
 
 // Sending Messages
 
@@ -26,14 +26,13 @@ async function plainText() {
     const messageList = await thread.getMessages();
 
     const decoder = new TextDecoder();
-    const parsedMessages = messageList.readItems.map(message => {
+    const parsedMessages = messageList.readItems.map((message) => {
         return {
             ...message,
             data: decoder.decode(message.data)
         };
     });
 }
-
 
 async function richText() {
     const thread = Endpoint.connection().thread('THREAD_ID');
@@ -76,7 +75,7 @@ async function richText() {
 async function responding() {
     const thread = Endpoint.connection().thread('THREAD_ID');
 
-// responseTo is the ID of the message you want to respond to
+    // responseTo is the ID of the message you want to respond to
     const publicMeta = { responseTo: 'MESSAGE_ID_TO_RESPOND' };
 
     const message = {
@@ -84,14 +83,13 @@ async function responding() {
         type: 'text'
     };
 
-
     const msgId = await thread.sendMessage({
         data: serializeObject(message),
         publicMeta: serializeObject(publicMeta)
     });
 
     const messageList = await thread.getMessages();
-    const parsedMessages = messageList.readItems.map(message => {
+    const parsedMessages = messageList.readItems.map((message) => {
         const responseTo = deserializeObject(message.publicMeta).responseTo;
 
         return {
@@ -100,6 +98,4 @@ async function responding() {
             responseToId: responseTo || null
         };
     });
-
-
 }

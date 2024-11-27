@@ -1,7 +1,13 @@
 import { StoreApi } from '../api/store/StoreApi';
 import { EventDispatcher } from '../EventDispatcher';
 import { ListOptions, PagingList } from '../types/core';
-import { Channel, EventsByChannel, StoreEvents, StoreFileEvents, SubscribeForChannel } from '../types/events';
+import {
+    Channel,
+    EventsByChannel,
+    StoreEvents,
+    StoreFileEvents,
+    SubscribeForChannel
+} from '../types/events';
 import { EndpointApiEvent, PrivmxFile, Store, UserWithPubKey } from '../types/index';
 import { StoreFilePayload } from '../types/store';
 import { FILE_MAX_CHUNK_SIZE } from '../utils/const';

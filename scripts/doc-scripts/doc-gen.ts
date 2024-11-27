@@ -39,14 +39,11 @@ function filterGroupsByCategory(
         }
 
         allIds.push(...filteredIDs);
-
-
     });
     return [allIds];
 }
 
 function serializeCallSignature(signature: CallSignatureType) {
-
     const functionParamsSnippet = (signature.parameters || [])
         .map((param) => {
             return `${param.name}: ${serializeParamType(param.type).name}`;
@@ -56,13 +53,15 @@ function serializeCallSignature(signature: CallSignatureType) {
     return `(${functionParamsSnippet})=>${serializeParamType(signature.type).name}`;
 }
 
-
 function createParamLink(qualifiedName: string) {
-
     return `js/web-sdk/${qualifiedName}`;
 }
 
-function serializeParamType(param: DeclarationParamType, indentLevel: number = 0, inline?: boolean): ArgType {
+function serializeParamType(
+    param: DeclarationParamType,
+    indentLevel: number = 0,
+    inline?: boolean
+): ArgType {
     if (!param) {
         throw Error('Invalid param type');
     }
@@ -75,9 +74,9 @@ function serializeParamType(param: DeclarationParamType, indentLevel: number = 0
         };
     }
     if (param.type === 'reference' && param.typeArguments) {
-        const serializedType = param.typeArguments.map(type => serializeParamType(type, 0, true));
+        const serializedType = param.typeArguments.map((type) => serializeParamType(type, 0, true));
         return {
-            name: `${param.name.trim()}<${serializedType.map(type => type.name.trim()).join(', ')}>`,
+            name: `${param.name.trim()}<${serializedType.map((type) => type.name.trim()).join(', ')}>`,
             optional: false,
             link: serializedType[0].name
         };
@@ -108,16 +107,16 @@ function serializeParamType(param: DeclarationParamType, indentLevel: number = 0
                 optional: false,
                 link: ''
             };
-
         } else if ('children' in param.declaration) {
             //Object literals
-            const objectFields = param.declaration.children
-                .map(
-                    (field) =>
-                        `${fieldIndentTabs}${field.name}: ${serializeParamType(field.type, indentLevel + 1).name};`
-                );
+            const objectFields = param.declaration.children.map(
+                (field) =>
+                    `${fieldIndentTabs}${field.name}: ${serializeParamType(field.type, indentLevel + 1).name};`
+            );
             return {
-                name: inline ? `{${objectFields.join(';')}}` : `{\n${objectFields.join('\n')}\n${closingIndent}}`,
+                name: inline
+                    ? `{${objectFields.join(';')}}`
+                    : `{\n${objectFields.join('\n')}\n${closingIndent}}`,
                 optional: false,
                 link: ''
             };
@@ -133,7 +132,9 @@ function serializeParamType(param: DeclarationParamType, indentLevel: number = 0
 
     if (param.type === 'intersection') {
         return {
-            name: (param.types as DeclarationParamType[]).map((it) => serializeParamType(it).name).join(' & '),
+            name: (param.types as DeclarationParamType[])
+                .map((it) => serializeParamType(it).name)
+                .join(' & '),
             optional: false,
             link: ''
         };
@@ -148,7 +149,12 @@ function serializeParamType(param: DeclarationParamType, indentLevel: number = 0
     }
 
     // @ts-ignore
-    if (param.type === 'conditional' || param.type === 'query' || param.type === 'mapped' || param.type === 'indexedAccess') {
+    if (
+        param.type === 'conditional' ||
+        param.type === 'query' ||
+        param.type === 'mapped' ||
+        param.type === 'indexedAccess'
+    ) {
         return {
             name: 'UNKNOWN',
             optional: false,
@@ -157,7 +163,6 @@ function serializeParamType(param: DeclarationParamType, indentLevel: number = 0
     }
 
     throw new Error(`Invalid param type ${param.type}`);
-
 }
 
 function serializeComment(comment?: DeclarationComment): string {
@@ -172,14 +177,16 @@ function serializeComment(comment?: DeclarationComment): string {
     return text;
 }
 
-function serializeException(comment?: DeclarationComment): { type: ArgType, description: string, code: number }[] {
-    const errorTags = comment?.blockTags?.filter(block => block.tag === '@throws');
+function serializeException(
+    comment?: DeclarationComment
+): { type: ArgType; description: string; code: number }[] {
+    const errorTags = comment?.blockTags?.filter((block) => block.tag === '@throws');
 
     if (!errorTags) {
         return [];
     }
 
-    return errorTags.map(errBlock => {
+    return errorTags.map((errBlock) => {
         return {
             type: { name: errBlock.content[0].text, link: '', optional: false },
             code: 0,
@@ -190,7 +197,11 @@ function serializeException(comment?: DeclarationComment): { type: ArgType, desc
 
 function serializeInterface(interfaceDeclaration: InterfaceDeclarationType): TypeReference {
     const serializedFields: TypeReference['fields'] = interfaceDeclaration.children.map((child) => {
-        return { name: child.name, description: serializeComment(child.comment), type: serializeParamType(child.type) };
+        return {
+            name: child.name,
+            description: serializeComment(child.comment),
+            type: serializeParamType(child.type)
+        };
     });
 
     const serializedType: TypeReference = {
@@ -366,9 +377,7 @@ function serializeTypeAlias(alias: TypeAlias): ObjectReference {
     const serializedType: ObjectReference = {
         description: serializeComment(alias.comment),
         name: alias.name,
-        fields: [
-            { name: type.name, type, description: alias.type.type, snippet: '' }
-        ],
+        fields: [{ name: type.name, type, description: alias.type.type, snippet: '' }],
         generic: [],
         methods: [],
         type: undefined
@@ -402,70 +411,49 @@ async function main() {
 
     const references = docsObject.children as ModuleDeclarations;
 
-    const [threadIDs] = filterGroupsByCategory(
-        docsObject.groups,
-        docsObject.symbolIdMap,
-        [
-            'src/clients/ThreadClient.ts',
-            'src/types/thread.ts',
-            'src/clients/ContextClients/GenericThread.ts',
-            'src/clients/ContextClients/ContextThreads.ts',
-            'src/api/thread/ThreadApi.ts',
-            'src/api/thread/ThreadApiInterface.ts'
-        ]
-    );
+    const [threadIDs] = filterGroupsByCategory(docsObject.groups, docsObject.symbolIdMap, [
+        'src/clients/ThreadClient.ts',
+        'src/types/thread.ts',
+        'src/clients/ContextClients/GenericThread.ts',
+        'src/clients/ContextClients/ContextThreads.ts',
+        'src/api/thread/ThreadApi.ts',
+        'src/api/thread/ThreadApiInterface.ts'
+    ]);
 
-    const [storeIDs] = filterGroupsByCategory(
-        docsObject.groups,
-        docsObject.symbolIdMap,
-        [
-            'src/clients/StoreClient.ts',
-            'src/types/store.ts',
-            'src/clients/StreamReader.ts',
-            'src/clients/StreamUploader.ts',
-            'src/clients/ContextClients/GenericStore.ts',
-            'src/clients/ContextClients/ContextStores.ts',
-            'src/api/thread/StoreApi.ts',
-            'src/api/thread/StoreApiInterface.ts'
-        ]
-    );
+    const [storeIDs] = filterGroupsByCategory(docsObject.groups, docsObject.symbolIdMap, [
+        'src/clients/StoreClient.ts',
+        'src/types/store.ts',
+        'src/clients/StreamReader.ts',
+        'src/clients/StreamUploader.ts',
+        'src/clients/ContextClients/GenericStore.ts',
+        'src/clients/ContextClients/ContextStores.ts',
+        'src/api/thread/StoreApi.ts',
+        'src/api/thread/StoreApiInterface.ts'
+    ]);
 
-    const [inboxIDs] = filterGroupsByCategory(
-        docsObject.groups,
-        docsObject.symbolIdMap,
-        [
-            'src/clients/InboxClient.ts',
-            'src/types/inboxes.ts',
-            'src/clients/InboxFileUploader.ts',
-            'src/clients/ContextClients/ContextInboxes.ts',
-            'src/clients/ContextClients/GenericInbox.ts',
-            'src/api/inbox/InboxApiInterface.ts'
-        ]
-    );
+    const [inboxIDs] = filterGroupsByCategory(docsObject.groups, docsObject.symbolIdMap, [
+        'src/clients/InboxClient.ts',
+        'src/types/inboxes.ts',
+        'src/clients/InboxFileUploader.ts',
+        'src/clients/ContextClients/ContextInboxes.ts',
+        'src/clients/ContextClients/GenericInbox.ts',
+        'src/api/inbox/InboxApiInterface.ts'
+    ]);
 
-    const [coreIds] = filterGroupsByCategory(
-        docsObject.groups,
-        docsObject.symbolIdMap,
-        [
-            'src/clients/Endpoint.ts',
-            'src/clients/PublicConnection.ts',
-            'src/clients/AnonymousConnection.ts',
-            'src/types/core.ts',
-            'src/types/user.ts',
-            'src/types/events.ts',
-            'src/types/context.ts'
-        ]
-    );
+    const [coreIds] = filterGroupsByCategory(docsObject.groups, docsObject.symbolIdMap, [
+        'src/clients/Endpoint.ts',
+        'src/clients/PublicConnection.ts',
+        'src/clients/AnonymousConnection.ts',
+        'src/types/core.ts',
+        'src/types/user.ts',
+        'src/types/events.ts',
+        'src/types/context.ts'
+    ]);
 
-    const [cryptoIds] = filterGroupsByCategory(
-        docsObject.groups,
-        docsObject.symbolIdMap,
-        [
-            'src/clients/PrivmxCrypto.ts',
-            'src/api/thread/CryptoApi.ts'
-        ]
-    );
-
+    const [cryptoIds] = filterGroupsByCategory(docsObject.groups, docsObject.symbolIdMap, [
+        'src/clients/PrivmxCrypto.ts',
+        'src/api/thread/CryptoApi.ts'
+    ]);
 
     const threadReferences = references
         .filter((reference) => threadIDs.includes(reference.id))
@@ -492,73 +480,80 @@ async function main() {
         .map(serializeReferences)
         .filter(Boolean);
 
-
-    const content =
-        JSON.stringify({
-            _meta: {
-                version: '2.0',
-                package: 'web-sdk',
-                lang: 'js',
-                name: 'Endpoint Web SDk'
-            },
-            Thread: [
-                ...threadReferences.filter((ref) => ref?.type === 'class').map((ref) => {
+    const content = JSON.stringify({
+        _meta: {
+            version: '2.0',
+            package: 'web-sdk',
+            lang: 'js',
+            name: 'Endpoint Web SDk'
+        },
+        Thread: [
+            ...threadReferences
+                .filter((ref) => ref?.type === 'class')
+                .map((ref) => {
                     return {
                         title: ref?.name,
                         content: [ref]
                     };
                 }),
-                {
-                    title: 'Types',
-                    content: threadReferences.filter((ref) => ref?.type === 'type')
-                }
-
-            ],
-            Store: [
-                ...serializedStore.filter(ref => ref?.type === 'class').map(ref => {
+            {
+                title: 'Types',
+                content: threadReferences.filter((ref) => ref?.type === 'type')
+            }
+        ],
+        Store: [
+            ...serializedStore
+                .filter((ref) => ref?.type === 'class')
+                .map((ref) => {
                     return {
                         title: ref?.name,
                         content: [ref]
                     };
                 }),
-                {
-                    title: 'Types',
-                    content: serializedStore.filter((ref) => ref?.type === 'type')
-                }
-            ],
-            Inbox: [
-                ...serializedInbox.filter((ref) => ref?.type === 'class').map((ref) => {
+            {
+                title: 'Types',
+                content: serializedStore.filter((ref) => ref?.type === 'type')
+            }
+        ],
+        Inbox: [
+            ...serializedInbox
+                .filter((ref) => ref?.type === 'class')
+                .map((ref) => {
                     return {
                         title: ref?.name,
                         content: [ref]
                     };
                 }),
-                {
-                    title: 'Types',
-                    content: serializedInbox.filter((ref) => ref?.type === 'type')
-                }
-            ],
-            Core: [
-                ...serializedCore.filter((ref) => ref?.type === 'class').map((ref) => {
+            {
+                title: 'Types',
+                content: serializedInbox.filter((ref) => ref?.type === 'type')
+            }
+        ],
+        Core: [
+            ...serializedCore
+                .filter((ref) => ref?.type === 'class')
+                .map((ref) => {
                     return {
                         title: ref?.name,
                         content: [ref]
                     };
                 }),
-                {
-                    title: 'Types',
-                    content: serializedCore.filter((ref) => ref?.type === 'type')
-                }
-            ],
-            Crypto: [
-                ...serializedCrypto.filter((ref) => ref?.type === 'class').map((ref) => {
+            {
+                title: 'Types',
+                content: serializedCore.filter((ref) => ref?.type === 'type')
+            }
+        ],
+        Crypto: [
+            ...serializedCrypto
+                .filter((ref) => ref?.type === 'class')
+                .map((ref) => {
                     return {
                         title: ref?.name,
                         content: [ref]
                     };
                 })
-            ]
-        });
+        ]
+    });
 
     await writeFile(join(__dirname, './out.json'), content);
 }

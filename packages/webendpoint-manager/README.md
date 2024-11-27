@@ -1,4 +1,5 @@
 # Web Endpoint Manager
+
 CLI tool for managing PrivMX Webendpoint assets.
 
 ## Usage
@@ -6,6 +7,7 @@ CLI tool for managing PrivMX Webendpoint assets.
 ```shell
 npx @simplito/webendpoint-manager
 ```
+
 This will detect your project type and install needed assets to chosen folder.
 
 ## Documentation

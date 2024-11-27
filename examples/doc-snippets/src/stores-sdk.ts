@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { deserializeObject, Endpoint, serializeObject } from '@simplito/privmx-webendpoint-sdk';
 
 async function basicStore() {
-    const users = [{ userId: 'MY_USER', pubKey: 'PUB_KEY' }, { userId: 'MY_USER2', pubKey: 'PUB_KEY2' }];
+    const users = [
+        { userId: 'MY_USER', pubKey: 'PUB_KEY' },
+        { userId: 'MY_USER2', pubKey: 'PUB_KEY2' }
+    ];
     const managers = [{ userId: 'MY_USER', pubKey: 'PUB_KEY' }];
 
     const storeId = await Endpoint.connection().stores.new({
@@ -12,8 +17,10 @@ async function basicStore() {
 }
 
 async function withName() {
-
-    const users = [{ userId: 'MY_USER', pubKey: 'PUB_KEY' }, { userId: 'MY_USER2', pubKey: 'PUB_KEY2' }];
+    const users = [
+        { userId: 'MY_USER', pubKey: 'PUB_KEY' },
+        { userId: 'MY_USER2', pubKey: 'PUB_KEY2' }
+    ];
     const managers = [{ userId: 'MY_USER', pubKey: 'PUB_KEY' }];
 
     const privateMeta = {
@@ -29,7 +36,10 @@ async function withName() {
 }
 
 async function withPublicMEta() {
-    const users = [{ userId: 'MY_USER', pubKey: 'PUB_KEY' }, { userId: 'MY_USER2', pubKey: 'PUB_KEY2' }];
+    const users = [
+        { userId: 'MY_USER', pubKey: 'PUB_KEY' },
+        { userId: 'MY_USER2', pubKey: 'PUB_KEY2' }
+    ];
     const managers = [{ userId: 'MY_USER', pubKey: 'PUB_KEY' }];
 
     const privateMeta = {
@@ -55,7 +65,7 @@ async function mostRecent() {
         contextId: 'CONTEXT_ID'
     });
 
-    const parsedStores = storesList.readItems.map(store => {
+    const parsedStores = storesList.readItems.map((store) => {
         return {
             ...store,
             privateMeta: deserializeObject(store.privateMeta),
@@ -65,7 +75,6 @@ async function mostRecent() {
 }
 
 async function oldestStores() {
-
     const storeList = await Endpoint.connection().stores.list({
         contextId: 'CONTEXT_ID',
         pageIndex: 0,
@@ -76,15 +85,12 @@ async function oldestStores() {
 }
 
 async function byStoreId() {
-
-
     const store = await Endpoint.connection().store('STORE_ID').info();
     const privateMeta = deserializeObject(store.privateMeta);
     const publicMeta = deserializeObject(store.publicMeta);
 }
 
 async function pagging() {
-
     const storeList = await Endpoint.connection().stores.list({
         contextId: 'CONTEXT_ID',
         options: {
@@ -92,7 +98,7 @@ async function pagging() {
         }
     });
 
-    const parsedThreads = storeList.readItems.map(thread => {
+    const parsedThreads = storeList.readItems.map((thread) => {
         return {
             ...thread,
             privateMeta: deserializeObject(thread.privateMeta),
@@ -107,16 +113,16 @@ async function renamingStores() {
     const store = Endpoint.connection().store('STORE_ID');
     const storeInfo = await store.info();
 
-    const newUsers = storeInfo.users.map(user => ({
-            //Your application must provide a way,
-            //to get user's public key from their userId.
-            userId: user,
-            pubKey: 'USER_PUBLIC_KEY'
-        })
-    );
+    const newUsers = storeInfo.users.map((user) => ({
+        //Your application must provide a way,
+        //to get user's public key from their userId.
+        userId: user,
+        pubKey: 'USER_PUBLIC_KEY'
+    }));
 
-    const newManagers = newUsers.filter(user =>
-        storeInfo.managers.find(manager => manager == user.userId));
+    const newManagers = newUsers.filter((user) =>
+        storeInfo.managers.find((manager) => manager == user.userId)
+    );
 
     const newPrivateMeta = {
         title: 'New Store name'
@@ -141,17 +147,17 @@ async function removingUsers() {
     //Get all users who were in the Store,
     //besides the one you want to remove:
     const newUsers = storeInfo.users
-        .filter(user => user !== userToRemove)
-        .map(user => ({
-                //Your application must provide a way,
-                //to get user's public key from their userId.
-                userId: user,
-                pubKey: 'USER_PUBLIC_KEY'
-            })
-        );
+        .filter((user) => user !== userToRemove)
+        .map((user) => ({
+            //Your application must provide a way,
+            //to get user's public key from their userId.
+            userId: user,
+            pubKey: 'USER_PUBLIC_KEY'
+        }));
 
-    const newManagers = newUsers.filter(user =>
-        storeInfo.managers.find(manager => manager == user.userId));
+    const newManagers = newUsers.filter((user) =>
+        storeInfo.managers.find((manager) => manager == user.userId)
+    );
 
     await store.update({
         ...storeInfo,

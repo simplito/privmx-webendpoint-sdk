@@ -141,4 +141,3 @@ export class PrivmxCrypto {
         return cryptoApi.verifySignature(data, signature, publicKey);
     }
 }
-
