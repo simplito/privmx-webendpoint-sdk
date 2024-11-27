@@ -7,7 +7,7 @@
         "doc:typedoc": "pnpm --filter='privmx-webendpoint-sdk' docs:json",
         "doc:parse-typedoc": "pnpm --filter='doc-scripts' docs:parse-json",
         "release": "pnpm --filter='./packages/*' build && pnpm --filter='./packages/*' build:clean && pnpm --filter='./packages/*' publish --access public",
-        "lint": "eslint . --fix .",
+        "lint": "eslint .",
         "format": "prettier --write .",
         "lint-and-format": "pnpm lint && pnpm format"
     },
