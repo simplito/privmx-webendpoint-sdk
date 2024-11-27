@@ -6,6 +6,7 @@ export type ArgType = {
     link?: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type UnknownDescription = {
     [key: string]: Array<string | ArgType>;
 };

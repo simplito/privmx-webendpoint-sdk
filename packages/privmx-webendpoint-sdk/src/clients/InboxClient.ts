@@ -11,7 +11,13 @@ import {
     PagingList,
     UserWithPubKey
 } from '../types';
-import { Channel, EventsByChannel, InboxEntryEvents, InboxEvents, SubscribeForChannel } from '../types/events';
+import {
+    Channel,
+    EventsByChannel,
+    InboxEntryEvents,
+    InboxEvents,
+    SubscribeForChannel
+} from '../types/events';
 import { InboxEntryPayload } from '../types/inboxes';
 import { InboxFileUploader } from './InboxFileUploader';
 import { Endpoint } from './Endpoint';
@@ -126,7 +132,6 @@ export class InboxClient {
         return inboxInfo;
     }
 
-
     /**
      * Fetches inbox public meta.
      * @returns {Promise<InboxPublicView>}
@@ -204,33 +209,33 @@ export class InboxClient {
 
         const filesWithHandles = entry.files
             ? await Promise.all(
-                entry.files.map(async (file) => {
-                    const meta = {
-                        publicMeta: file.publicMeta || new Uint8Array(),
-                        privateMeta: file.privateMeta || new Uint8Array()
-                    };
+                  entry.files.map(async (file) => {
+                      const meta = {
+                          publicMeta: file.publicMeta || new Uint8Array(),
+                          privateMeta: file.privateMeta || new Uint8Array()
+                      };
 
-                    if (file.data instanceof Uint8Array) {
-                        return {
-                            data: file.data,
-                            handle: await api.createFileHandle(
-                                meta.publicMeta,
-                                meta.privateMeta,
-                                file.data.length
-                            )
-                        };
-                    }
+                      if (file.data instanceof Uint8Array) {
+                          return {
+                              data: file.data,
+                              handle: await api.createFileHandle(
+                                  meta.publicMeta,
+                                  meta.privateMeta,
+                                  file.data.length
+                              )
+                          };
+                      }
 
-                    return {
-                        data: file.data,
-                        handle: await api.createFileHandle(
-                            meta.publicMeta,
-                            meta.privateMeta,
-                            file.data.size
-                        )
-                    };
-                })
-            )
+                      return {
+                          data: file.data,
+                          handle: await api.createFileHandle(
+                              meta.publicMeta,
+                              meta.privateMeta,
+                              file.data.size
+                          )
+                      };
+                  })
+              )
             : [];
 
         const fileHandles = filesWithHandles.map(({ handle }) => handle);
@@ -273,8 +278,7 @@ export class InboxClient {
             0
         );
 
-        while (await inboxFileUploader.sendNextChunk()) {
-        }
+        while (await inboxFileUploader.sendNextChunk());
     }
 
     /**

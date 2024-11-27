@@ -16,8 +16,10 @@ import { Endpoint } from '../Endpoint';
  * Provides a wrapper for functions used to manage Inboxes in given Context.
  */
 export class ContextInboxes {
-    constructor(private _endpoint: Endpoint, private _eventDispatcher: EventDispatcher) {
-    }
+    constructor(
+        private _endpoint: Endpoint,
+        private _eventDispatcher: EventDispatcher
+    ) {}
 
     /**
      * Lists Inboxes the user has access to.

@@ -1,5 +1,12 @@
 import { EventDispatcher } from '../../EventDispatcher';
-import { EndpointApiEvent, ListOptions, PagingList, PrivmxFile, Store, UserWithPubKey } from '../../types';
+import {
+    EndpointApiEvent,
+    ListOptions,
+    PagingList,
+    PrivmxFile,
+    Store,
+    UserWithPubKey
+} from '../../types';
 import { EventsByChannel, StoreEvents, SubscribeForChannel } from '../../types/events';
 import { Endpoint } from '../Endpoint';
 import { StoreClient } from '../StoreClient';
@@ -10,8 +17,10 @@ import { StreamReader } from '../StreamReader';
  * Provides a wrapper for functions used to manage Stores in given Context.
  */
 export class ContextStores {
-    constructor(private _endpoint: Endpoint, private _eventDispatcher: EventDispatcher) {
-    }
+    constructor(
+        private _endpoint: Endpoint,
+        private _eventDispatcher: EventDispatcher
+    ) {}
 
     /**
      * Lists Stores the user has access to.

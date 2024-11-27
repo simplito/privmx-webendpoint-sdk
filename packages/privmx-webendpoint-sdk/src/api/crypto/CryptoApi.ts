@@ -4,10 +4,13 @@ import { CryptoApiInterface } from './CryptoApiInterface';
  * Cryptography API from the PrivMX Endpoint Web
  */
 export class CryptoApi implements CryptoApiInterface {
-    public constructor(private api: CryptoApiInterface) {
-    }
+    public constructor(private api: CryptoApiInterface) {}
 
-    async verifySignature(data: Uint8Array, signature: Uint8Array, publicKey: string): Promise<boolean> {
+    async verifySignature(
+        data: Uint8Array,
+        signature: Uint8Array,
+        publicKey: string
+    ): Promise<boolean> {
         return await this.api.verifySignature(data, signature, publicKey);
     }
 
@@ -36,7 +39,6 @@ export class CryptoApi implements CryptoApiInterface {
     async derivePublicKey(privKey: string): Promise<string> {
         return await this.api.derivePublicKey(privKey);
     }
-
 
     async derivePrivateKey(salt: string, password: string): Promise<string> {
         return await this.api.derivePrivateKey(salt, password);

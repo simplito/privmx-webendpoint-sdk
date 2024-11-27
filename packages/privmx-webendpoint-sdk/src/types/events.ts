@@ -100,7 +100,11 @@ export interface ThreadMessageDeletedEvent extends GenericEvent {
     data: ThreadDeletedMessageEventData;
 }
 
-export type ThreadEvents = ThreadCreatedEvent | ThreadDeletedEvent | ThreadStatsEvent | ThreadUpdatedEvent
+export type ThreadEvents =
+    | ThreadCreatedEvent
+    | ThreadDeletedEvent
+    | ThreadStatsEvent
+    | ThreadUpdatedEvent;
 
 /**
  * Represents an event for when Thread statistics are updated. For example a new message has arrived (there is no need to subscribe to a specific Thread).
@@ -120,7 +124,10 @@ export interface ThreadMessageUpdatedEvent extends GenericEvent {
     data: Message;
 }
 
-export type ThreadMessageEvents = ThreadMessageUpdatedEvent | ThreadNewMessageEvent | ThreadMessageDeletedEvent
+export type ThreadMessageEvents =
+    | ThreadMessageUpdatedEvent
+    | ThreadNewMessageEvent
+    | ThreadMessageDeletedEvent;
 
 // --- STORE EVENTS ---
 
@@ -187,8 +194,12 @@ export interface StoreFileDeletedEvent extends GenericEvent {
     data: StoreFileDeletedEventData;
 }
 
-export type StoreFileEvents = StoreFileDeletedEvent | StoreFileUpdatedEvent | StoreFileCreatedEvent
-export type StoreEvents = StoreDeletedEvent | StoreUpdatedEvent | StoreCreatedEvent | StoreStatsChangedEvent
+export type StoreFileEvents = StoreFileDeletedEvent | StoreFileUpdatedEvent | StoreFileCreatedEvent;
+export type StoreEvents =
+    | StoreDeletedEvent
+    | StoreUpdatedEvent
+    | StoreCreatedEvent
+    | StoreStatsChangedEvent;
 
 // --- INBOX EVENTS ---
 
@@ -234,8 +245,8 @@ export interface InboxEntryDeletedEvent extends GenericEvent {
     data: InboxEntryDeletedEventData;
 }
 
-export type InboxEntryEvents = InboxEntryCreatedEvent | InboxEntryDeletedEvent
-export type InboxEvents = InboxCreatedEvent | InboxUpdatedEvent | InboxDeletedEvent
+export type InboxEntryEvents = InboxEntryCreatedEvent | InboxEntryDeletedEvent;
+export type InboxEvents = InboxCreatedEvent | InboxUpdatedEvent | InboxDeletedEvent;
 
 // ---- CONNECTION ----
 
@@ -262,14 +273,14 @@ export interface BreakEvent extends GenericEvent {
 }
 
 export type EndpointApiEvent =
-// | ThreadCreatedEvent
-// | ThreadUpdatedEvent
-// | ThreadDeletedEvent
-// | ThreadStatsEvent
+    // | ThreadCreatedEvent
+    // | ThreadUpdatedEvent
+    // | ThreadDeletedEvent
+    // | ThreadStatsEvent
 
-// | ThreadNewMessageEvent
-// | ThreadMessageUpdatedEvent
-// | ThreadMessageDeletedEvent
+    // | ThreadNewMessageEvent
+    // | ThreadMessageUpdatedEvent
+    // | ThreadMessageDeletedEvent
     | ThreadEvents
     | ThreadMessageEvents
     | StoreEvents
@@ -357,11 +368,8 @@ export const channelEventsMap = {
 >;
 
 export type ChannelEventsMap = typeof channelEventsMap;
-export type ChannelEvents<C extends keyof ChannelEventsMap> = ChannelEventsMap[C] extends Array<
-        infer R
-    >
-    ? R
-    : never;
+export type ChannelEvents<C extends keyof ChannelEventsMap> =
+    ChannelEventsMap[C] extends Array<infer R> ? R : never;
 
 export type EventTypes = {
     [T in keyof typeof EndpointEventTypes]: (typeof EndpointEventTypes)[T];

@@ -1,38 +1,38 @@
 {
-  "name": "@simplito/privmx-webendpoint-sdk",
-  "description": "Set of Typescript/Javascript tools for working with Privmx Webendpoint",
-  "version": "2.0.4",
-  "type": "module",
-  "license": "MIT",
-  "homepage": "https://privmx.dev/",
-  "author": "Simplito sp. z o.o.",
-  "repository": "https://github.com/simplito/privmx-webendpoint-sdk",
-  "module": "./dist/index.js",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/index.js"
-      }
+    "name": "@simplito/privmx-webendpoint-sdk",
+    "description": "Set of Typescript/Javascript tools for working with Privmx Webendpoint",
+    "version": "2.0.4",
+    "type": "module",
+    "license": "MIT",
+    "homepage": "https://privmx.dev/",
+    "author": "Simplito sp. z o.o.",
+    "repository": "https://github.com/simplito/privmx-webendpoint-sdk",
+    "module": "./dist/index.js",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/types/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "files": [
+        "dist/**/**"
+    ],
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "build:clean": "rm -rd ./dist/* && pnpm build",
+        "lint:types": "tsc --project tsconfig.json --noEmit",
+        "release": "pnpm build && pnpm publish",
+        "release:local": "pnpm build && pnpm pack",
+        "release:clean": "rm -rd ./dist && pnpm run release",
+        "docs:json": "typedoc --excludeNotDocumented false --commentStyle all --json .doc/docs.json  ./src",
+        "docs:parse-json": "npx tsx ./scripts/doc-gen.ts"
+    },
+    "prepare": "npm run build",
+    "devDependencies": {
+        "jsdoc": "^4.0.3",
+        "typedoc": "^0.26.2",
+        "typedoc-plugin-markdown": "^4.1.0"
     }
-  },
-  "files": [
-    "dist/**/**"
-  ],
-  "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "build:clean": "rm -rd ./dist/* && pnpm build",
-    "lint:types": "tsc --project tsconfig.json --noEmit",
-    "release": "pnpm build && pnpm publish",
-    "release:local": "pnpm build && pnpm pack",
-    "release:clean": "rm -rd ./dist && pnpm run release",
-    "docs:json": "typedoc --excludeNotDocumented false --commentStyle all --json .doc/docs.json  ./src",
-    "docs:parse-json": "npx tsx ./scripts/doc-gen.ts"
-  },
-  "prepare": "npm run build",
-  "devDependencies": {
-    "jsdoc": "^4.0.3",
-    "typedoc": "^0.26.2",
-    "typedoc-plugin-markdown": "^4.1.0"
-  }
 }

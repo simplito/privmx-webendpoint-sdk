@@ -1,6 +1,6 @@
 import { EventDispatcher } from '../../EventDispatcher';
-import { EndpointApiEvent, ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../../types';
-import { EventsByChannel, SubscribeForChannel, ThreadEvents, ThreadMessageEvents } from '../../types/events';
+import { ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../../types';
+import { EventsByChannel, SubscribeForChannel, ThreadEvents } from '../../types/events';
 import { Endpoint } from '../Endpoint';
 import { ThreadClient } from '../ThreadClient';
 
@@ -8,8 +8,10 @@ import { ThreadClient } from '../ThreadClient';
  * Provides a wrapper for functions used to manage Threads in given Context.
  */
 export class ContextThreads {
-    constructor(private _endpoint: Endpoint, private _eventDispatcher: EventDispatcher) {
-    }
+    constructor(
+        private _endpoint: Endpoint,
+        private _eventDispatcher: EventDispatcher
+    ) {}
 
     /**
      * Returns a list of Threads in given Context.

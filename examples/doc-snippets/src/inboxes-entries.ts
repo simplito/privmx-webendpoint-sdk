@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { deserializeObject, Endpoint, serializeObject } from '@simplito/privmx-webendpoint-sdk';
 
 async function entrtiesPublic() {
@@ -15,61 +17,66 @@ async function entrtiesPublic() {
 }
 
 async function entriesprivate() {
-
-    await Endpoint.connection().inbox('INBOX_ID').sendData({
-        data: serializeObject({
-            inquiryType: 'newsletter',
-            answer: 'email@domain.com'
-        })
-
-    });
+    await Endpoint.connection()
+        .inbox('INBOX_ID')
+        .sendData({
+            data: serializeObject({
+                inquiryType: 'newsletter',
+                answer: 'email@domain.com'
+            })
+        });
 }
-
 
 //submittin
 
 async function basicSubmit() {
     const entryMessage = 'Example message';
-    const sentEntry = await Endpoint.connection().inbox('INBOX_ID').sendData({
-        data: new TextEncoder().encode(entryMessage)
-    });
+    const sentEntry = await Endpoint.connection()
+        .inbox('INBOX_ID')
+        .sendData({
+            data: new TextEncoder().encode(entryMessage)
+        });
 }
 
 async function objectSubmit() {
-    const sentEntry = await Endpoint.connection().inbox('INBOX_ID').sendData({
-        data: serializeObject({
-            type: 'General inquiry',
-            answer: 'Example answer'
-        })
-    });
+    const sentEntry = await Endpoint.connection()
+        .inbox('INBOX_ID')
+        .sendData({
+            data: serializeObject({
+                type: 'General inquiry',
+                answer: 'Example answer'
+            })
+        });
 }
-
 
 async function submitFile() {
-    const files: File[] = [/*e.g. Files picked by user from their browser*/];
+    const files: File[] = [
+        /*e.g. Files picked by user from their browser*/
+    ];
 
-    await Endpoint.connection().inbox('INBOX_ID').sendData({
-        data: serializeObject({
-            inquiryType: 'newsletter',
-            answer: 'email@domain.com'
-        }),
-        files: files.map(file => ({
-            data: file,
-            privateMeta: serializeObject({
-                name: file.name,
-                mimetype: file.type
-            })
-        }))
-    });
+    await Endpoint.connection()
+        .inbox('INBOX_ID')
+        .sendData({
+            data: serializeObject({
+                inquiryType: 'newsletter',
+                answer: 'email@domain.com'
+            }),
+            files: files.map((file) => ({
+                data: file,
+                privateMeta: serializeObject({
+                    name: file.name,
+                    mimetype: file.type
+                })
+            }))
+        });
 }
-
 
 //fetching
 
 async function mostRecentEntries() {
     const entryList = await Endpoint.connection().inbox('INBOX_ID').listEntries();
 
-    const parsedEntries = entryList.readItems.map(entry => {
+    const parsedEntries = entryList.readItems.map((entry) => {
         const deserializedData = deserializeObject(entry.data);
         return {
             ...entry,
@@ -84,28 +91,29 @@ async function oldestEntries() {
     });
 }
 
-
 async function fetchFile() {
-    const sentEntry = await Endpoint.connection().inbox('INBOX_ID').sendData({
-        data: serializeObject({
-            inquiryType: 'newsletter',
-            answer: 'email@domain.com'
-        }),
-        files: files.map(file => ({
-            data: file,
-            privateMeta: serializeObject({
-                name: file.name,
-                mimetype: file.type
-            })
-        }))
-    });
+    const sentEntry = await Endpoint.connection()
+        .inbox('INBOX_ID')
+        .sendData({
+            data: serializeObject({
+                inquiryType: 'newsletter',
+                answer: 'email@domain.com'
+            }),
+            files: files.map((file) => ({
+                data: file,
+                privateMeta: serializeObject({
+                    name: file.name,
+                    mimetype: file.type
+                })
+            }))
+        });
 
     const entryList = await Endpoint.connection().inbox('INBOX_ID').listEntries();
-    const deserializedEntries = entryList.readItems.map(entry => {
+    const deserializedEntries = entryList.readItems.map((entry) => {
         return {
             ...entry,
             data: deserializeObject(entry.data),
-            files: entry.files.map(file => ({
+            files: entry.files.map((file) => ({
                 ...file,
                 privateMeta: deserializeObject(file.privateMeta)
             }))
@@ -118,6 +126,4 @@ async function fetchFile() {
         fileId: entryFile.info.fileId,
         fileName: entryFile.privateMeta['name']
     });
-
-
 }

@@ -1,11 +1,10 @@
-import { EndpointApiEvent, ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../../types';
+import { ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../../types';
 import { EventsByChannel, SubscribeForChannel, ThreadMessageEvents } from '../../types/events';
 import { ThreadMessagePayload } from '../../types/thread';
 import { ThreadClient } from '../ThreadClient';
 
 export class GenericThread {
-    constructor(private _threadClient: ThreadClient) {
-    }
+    constructor(private _threadClient: ThreadClient) {}
 
     /**
      * Deletes Thread.

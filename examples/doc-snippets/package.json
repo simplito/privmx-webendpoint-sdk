@@ -1,16 +1,15 @@
 {
-  "name": "doc-snippets",
-  "private": "true",
-  "version": "1.0.0",
-  "description": "",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@simplito/privmx-webendpoint-sdk": "workspace:*"
-  }
+    "name": "doc-snippets",
+    "private": "true",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {},
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@simplito/privmx-webendpoint-sdk": "workspace:*"
+    }
 }

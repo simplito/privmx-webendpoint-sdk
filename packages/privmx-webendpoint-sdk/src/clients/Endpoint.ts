@@ -81,7 +81,11 @@ export class Endpoint {
         this._defaultConnectionId = id;
     }
 
-    constructor(private _coreApi: Connection, connectionId: string, label: string) {
+    constructor(
+        private _coreApi: Connection,
+        connectionId: string,
+        label: string
+    ) {
         this.eventDispatcher = new EventDispatcher();
         this._connectionId = connectionId;
         this._label = label ? label : connectionId;
@@ -424,7 +428,7 @@ export class Endpoint {
         Endpoint._isEventLoopRunning = true;
         const listener = Endpoint.dispatchEvent;
 
-        let eventLoop = async () => {
+        const eventLoop = async () => {
             try {
                 const event = await eventQueue.waitEvent();
 

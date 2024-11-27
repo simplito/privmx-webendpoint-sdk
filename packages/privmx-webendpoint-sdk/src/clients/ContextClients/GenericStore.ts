@@ -1,12 +1,18 @@
-import { EndpointApiEvent, ListOptions, PagingList, PrivmxFile, Store, UserWithPubKey } from '../../types';
+import {
+    EndpointApiEvent,
+    ListOptions,
+    PagingList,
+    PrivmxFile,
+    Store,
+    UserWithPubKey
+} from '../../types';
 import { EventsByChannel, StoreFileEvents, SubscribeForChannel } from '../../types/events';
 import { StoreFilePayload } from '../../types/store';
 import { FileUploader } from '../FileUploader';
 import { StoreClient } from '../StoreClient';
 
 export class GenericStore {
-    constructor(private _storeClient: StoreClient) {
-    }
+    constructor(private _storeClient: StoreClient) {}
 
     /**
      * Returns info about Store.

@@ -1,11 +1,18 @@
-import { EndpointApiEvent, FilesConfig, Inbox, InboxEntry, ListOptions, PagingList, UserWithPubKey } from '../../types';
+import {
+    EndpointApiEvent,
+    FilesConfig,
+    Inbox,
+    InboxEntry,
+    ListOptions,
+    PagingList,
+    UserWithPubKey
+} from '../../types';
 import { EventsByChannel, InboxEntryEvents, SubscribeForChannel } from '../../types/events';
 import { InboxEntryPayload } from '../../types/inboxes';
 import { InboxClient } from '../InboxClient';
 
 export class GenericInbox {
-    constructor(private _inboxClient: InboxClient) {
-    }
+    constructor(private _inboxClient: InboxClient) {}
 
     /**
      * Fetches inbox public meta.

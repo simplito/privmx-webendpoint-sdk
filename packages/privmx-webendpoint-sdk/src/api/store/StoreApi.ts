@@ -2,8 +2,7 @@ import { PrivmxFile, PagingList, PagingQuery, Store, UserWithPubKey } from '../.
 import { StoreApiInterface } from './StoreApiInterface';
 
 export class StoreApi implements StoreApiInterface {
-    public constructor(private api: StoreApiInterface) {
-    }
+    public constructor(private api: StoreApiInterface) {}
 
     async updateFileMeta(
         fileId: string,

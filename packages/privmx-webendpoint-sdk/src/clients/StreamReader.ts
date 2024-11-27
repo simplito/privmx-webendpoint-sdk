@@ -56,7 +56,7 @@ export class StreamReader {
 
     public async readNextChunk(): Promise<boolean> {
         const chunk = await this._api.readFromFile(this._handle, FILE_MAX_CHUNK_SIZE);
-        let newData = new Uint8Array(this._data.length + chunk.length);
+        const newData = new Uint8Array(this._data.length + chunk.length);
         newData.set(this._data);
         newData.set(chunk, this._data.length);
         this._data = newData;
