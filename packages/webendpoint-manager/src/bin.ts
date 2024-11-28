@@ -23,6 +23,7 @@ interface AssetResult {
     isCompressed: boolean;
     cleanup?: Function;
 }
+
 type AssetFetcher = (version: string, saveTo: string) => Promise<AssetResult>;
 
 async function pressEnterToContinue() {
@@ -87,8 +88,16 @@ const fetchNpmJSPackage: AssetFetcher = async (version, saveTo) => {
     cp.execSync('npm init -y', { cwd: tmpPkgDir });
 
     cp.execSync('npm i ' + pkgName, { cwd: tmpPkgDir });
+
+    const assetsPath = pathResolve(
+        tmpPkgDir,
+        'node_modules/@simplito/privmx-webendpoint/webAssets'
+    );
+
+    const licenseFile = pathResolve(assetsPath, 'LICENSE.md');
+    rmSync(licenseFile);
     return {
-        path: pathResolve(tmpPkgDir, 'node_modules/@simplito/privmx-webendpoint/webAssets'),
+        path: assetsPath,
         isCompressed: false,
         cleanup: () => {
             rmSync(tmpPkgDir, { recursive: true, force: true });
@@ -125,6 +134,17 @@ async function checkDestPath(destPath: string) {
     } else {
         return false;
     }
+}
+
+async function getLicenseConfirmation() {
+    const confirmation = await confirm({
+        message:
+            'PrivMX Endpoint and PrivMX Bridge are licensed under the PrivMX Free License.\n' +
+            '  See the License for the specific language governing permissions and limitations under the License at https://privmx.dev/licensing, proceed ?',
+        default: true
+    });
+
+    return confirmation;
 }
 
 async function choseDestFolder() {
@@ -220,7 +240,7 @@ type PackageJsonDependencies = [
 function getProjectDependencies(): PackageJsonDependencies {
     const packageJsonPath: string = join(process.cwd(), 'package.json');
     if (!existsSync(packageJsonPath)) {
-        console.log('No package.json found. Exiting...');
+        ora('No package.json found. Exiting...').fail();
         process.exit(1);
     }
 
@@ -295,8 +315,10 @@ async function main() {
     let userProjectType: ProjectType = DEFAULT_PROJECT_TYPE;
     for (const projectType of PROJECT_TYPES) {
         if (await projectType.matchFn(projectDependencies)) {
-            console.log(`Detected as ${projectType.name} project`);
-            const answer = await confirm({ message: 'Please confirm if detected properly: Y/N' });
+            const answer = await confirm({
+                message: `Detected as ${projectType.name} project 
+  Please confirm if detected properly: Y/N`
+            });
             if (!answer) {
                 continue;
             }
@@ -316,6 +338,13 @@ async function main() {
     //check if assets exists
     const abort = await checkDestPath(destFolder);
     if (abort) {
+        process.exit(0);
+    }
+
+    const isLicenseAccepted = await getLicenseConfirmation();
+
+    if (!isLicenseAccepted) {
+        ora('License not accepted, aborting...').fail();
         process.exit(0);
     }
 
@@ -345,18 +374,25 @@ async function main() {
         spinner.succeed(`Assets fetched to: ${destFolder}`);
         await userProjectType.setup(destFolder);
     } catch (e) {
+        if (e instanceof Error && e.name === 'ExitPromptError') {
+            spinner.fail('Aborting script...');
+            return;
+        }
         spinner.fail(e.message || e);
     }
 
     // extract assets
 }
+
 main()
     .then(() => {
-        console.log(
-            'For more information please visit our documentation: https://docs.privmx.dev/'
-        );
+        ora('For more information please visit our documentation: https://docs.privmx.dev/').info();
     })
     .catch((e) => {
+        if (e instanceof Error && e.name === 'ExitPromptError') {
+            ora('Aborting script...').fail();
+            return;
+        }
         console.error(e);
         process.exit(1);
     });
