@@ -102,3 +102,85 @@ export interface UserWithPubKey {
      */
     pubKey: string;
 }
+
+/**
+ * Holds Container policies settings
+ *
+ * @type {ContainerWithoutItemPolicy}
+ *
+ * @param {PolicyEntry} get determine who can get a container
+ * @param {PolicyEntry} update determine who can update a container
+ * @param {PolicyEntry} delete determine who can delete a container
+ * @param {PolicyEntry} updatePolicy determine who can update the policy of a container
+ * @param {PolicyBooleanEntry} updaterCanBeRemovedFromManagers determine whether the updater can be removed from the list of managers
+ * @param {PolicyBooleanEntry} ownerCanBeRemovedFromManagers determine whether the owner can be removed from the list of managers
+ */
+export interface ContainerWithoutItemPolicy {
+    get?: PolicyEntry;
+    update?: PolicyEntry;
+    delete?: PolicyEntry;
+    updatePolicy?: PolicyEntry;
+    updaterCanBeRemovedFromManagers?: PolicyBooleanEntry;
+    ownerCanBeRemovedFromManagers?: PolicyBooleanEntry;
+}
+
+/**
+ * Holds Container policies settings
+ *
+ * @type {ContainerPolicy}
+ *
+ * @param {ItemPolicy} item item policies
+ */
+export interface ContainerPolicy extends ContainerWithoutItemPolicy {
+    item?: ItemPolicy;
+}
+
+/**
+ * @type {PolicyEntry}
+ */
+export type PolicyEntry =
+    | 'inherit'
+    | 'yes'
+    | 'no'
+    | 'default'
+    | 'none'
+    | 'all'
+    | 'user'
+    | 'owner'
+    | 'manager'
+    | 'itemOwner'
+    | 'itemOwner&user'
+    | 'itemOwner&user,manager'
+    | 'owner&user'
+    | 'manager&owner'
+    | 'itemOwner,manager'
+    | 'itemOwner,owner'
+    | 'itemOwner,manager,owner'
+    | 'manager,owner'
+    | (string & { __policyEntry: never });
+
+/**
+ * @type {PolicyBooleanEntry}
+ */
+export type PolicyBooleanEntry = 'inherit' | 'default' | 'yes' | 'no';
+
+/**
+ * Holds Container's item policies settings
+ *
+ * @type {ContainerWithoutItemPolicy}
+ *
+ * @param {PolicyEntry} get determine who can get an item
+ * @param {PolicyEntry} listMy determine who can list items created by me
+ * @param {PolicyEntry} listAll determine who can list all items
+ * @param {PolicyEntry} create determine who can create an item
+ * @param {PolicyEntry} update determine who can update an item
+ * @param {PolicyEntry} delete determine who can delete an item
+ */
+export interface ItemPolicy {
+    get?: PolicyEntry;
+    listMy?: PolicyEntry;
+    listAll?: PolicyEntry;
+    create?: PolicyEntry;
+    update?: PolicyEntry;
+    delete?: PolicyEntry;
+}
