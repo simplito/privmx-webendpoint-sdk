@@ -2,7 +2,7 @@
 
 import { confirm, input } from '@inquirer/prompts';
 import { join, resolve as pathResolve } from 'path';
-import { rm } from 'node:fs/promises';
+import { readdir, rm } from 'node:fs/promises';
 import { existsSync, readFileSync, createWriteStream, renameSync, mkdirSync, rmSync } from 'fs';
 import { Readable } from 'stream';
 import * as cp from 'child_process';
@@ -11,6 +11,7 @@ import * as UUID from 'uuid';
 // @ts-ignore
 import AdmZip from 'adm-zip';
 import ora from 'ora';
+import { readdirSync } from 'node:fs';
 
 type ProjectType = {
     name: string;
@@ -23,6 +24,7 @@ interface AssetResult {
     isCompressed: boolean;
     cleanup?: Function;
 }
+
 type AssetFetcher = (version: string, saveTo: string) => Promise<AssetResult>;
 
 async function pressEnterToContinue() {
@@ -87,8 +89,15 @@ const fetchNpmJSPackage: AssetFetcher = async (version, saveTo) => {
     cp.execSync('npm init -y', { cwd: tmpPkgDir });
 
     cp.execSync('npm i ' + pkgName, { cwd: tmpPkgDir });
+    const assetsPath = pathResolve(
+        tmpPkgDir,
+        'node_modules/@simplito/privmx-webendpoint/webAssets'
+    );
+
+    const licenseFile = pathResolve(assetsPath, 'LICENSE.md');
+    rmSync(licenseFile);
     return {
-        path: pathResolve(tmpPkgDir, 'node_modules/@simplito/privmx-webendpoint/webAssets'),
+        path: assetsPath,
         isCompressed: false,
         cleanup: () => {
             rmSync(tmpPkgDir, { recursive: true, force: true });
@@ -350,6 +359,7 @@ async function main() {
 
     // extract assets
 }
+
 main()
     .then(() => {
         console.log(
