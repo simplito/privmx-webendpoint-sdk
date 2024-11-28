@@ -1,16 +1,9 @@
 import { EventDispatcher } from '../../EventDispatcher';
-import {
-    EndpointApiEvent,
-    ListOptions,
-    PagingList,
-    PrivmxFile,
-    Store,
-    UserWithPubKey
-} from '../../types';
+import { EndpointApiEvent, ListOptions, PagingList, PrivmxFile, Store } from '../../types';
 import { EventsByChannel, StoreEvents, SubscribeForChannel } from '../../types/events';
 import { Endpoint } from '../Endpoint';
 import { StoreClient } from '../StoreClient';
-import { StoreFilePayload } from '../../types/store';
+import { CreateStorePayload, StoreFilePayload } from '../../types/store';
 import { StreamReader } from '../StreamReader';
 
 /**
@@ -50,13 +43,7 @@ export class ContextStores {
      *
      * @returns {Promise<string>} ID of the created Store
      */
-    async new(info: {
-        contextId: string;
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-    }): Promise<string> {
+    async new(info: CreateStorePayload): Promise<string> {
         const api = await this._endpoint.getStoreApi();
 
         return await StoreClient.createStore(api, { ...info });

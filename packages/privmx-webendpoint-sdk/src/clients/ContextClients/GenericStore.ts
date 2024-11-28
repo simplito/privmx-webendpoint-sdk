@@ -1,13 +1,6 @@
-import {
-    EndpointApiEvent,
-    ListOptions,
-    PagingList,
-    PrivmxFile,
-    Store,
-    UserWithPubKey
-} from '../../types';
+import { EndpointApiEvent, ListOptions, PagingList, PrivmxFile, Store } from '../../types';
 import { EventsByChannel, StoreFileEvents, SubscribeForChannel } from '../../types/events';
-import { StoreFilePayload } from '../../types/store';
+import { StoreFilePayload, UpdateStorePayload } from '../../types/store';
 import { FileUploader } from '../FileUploader';
 import { StoreClient } from '../StoreClient';
 
@@ -48,17 +41,7 @@ export class GenericStore {
      * @param {boolean} [newStore.options.forceGenerateNewKey] - optional flag allowing new users to access old data
      * @returns {Promise<void>} promise that resolves when the Store update is complete
      */
-    async update(newStore: {
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        version: number;
-        options?: {
-            force?: boolean;
-            forceGenerateNewKey?: boolean;
-        };
-    }): Promise<void> {
+    async update(newStore: UpdateStorePayload): Promise<void> {
         return await this._storeClient.storeUpdate(newStore);
     }
 

@@ -1,6 +1,6 @@
-import { ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../../types';
+import { ListOptions, Message, PagingList, Thread } from '../../types';
 import { EventsByChannel, SubscribeForChannel, ThreadMessageEvents } from '../../types/events';
-import { ThreadMessagePayload } from '../../types/thread';
+import { ThreadMessagePayload, UpdateThreadPayload } from '../../types/thread';
 import { ThreadClient } from '../ThreadClient';
 
 export class GenericThread {
@@ -39,17 +39,7 @@ export class GenericThread {
      *
      * @returns {Promise<void>} void
      */
-    async update(updatedData: {
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        version: number;
-        options?: {
-            force?: boolean;
-            forceGenerateNewKey?: boolean;
-        };
-    }): Promise<void> {
+    async update(updatedData: UpdateThreadPayload): Promise<void> {
         return await this._threadClient.updateThread(updatedData);
     }
 

@@ -8,8 +8,8 @@ import {
     StoreFileEvents,
     SubscribeForChannel
 } from '../types/events';
-import { EndpointApiEvent, PrivmxFile, Store, UserWithPubKey } from '../types/index';
-import { StoreFilePayload } from '../types/store';
+import { EndpointApiEvent, PrivmxFile, Store } from '../types/index';
+import { CreateStorePayload, StoreFilePayload, UpdateStorePayload } from '../types/store';
 import { FILE_MAX_CHUNK_SIZE } from '../utils/const';
 import { Endpoint } from './Endpoint';
 import { FileUploader } from './FileUploader';
@@ -72,16 +72,7 @@ export class StoreClient {
      *
      * @returns {Promise<string>} ID of the created Store
      */
-    static async createStore(
-        api: StoreApi,
-        newStore: {
-            contextId: string;
-            users: UserWithPubKey[];
-            managers: UserWithPubKey[];
-            publicMeta?: Uint8Array;
-            privateMeta?: Uint8Array;
-        }
-    ): Promise<string> {
+    static async createStore(api: StoreApi, newStore: CreateStorePayload): Promise<string> {
         const meta = {
             publicMeta: newStore.publicMeta || new Uint8Array(),
             privateMeta: newStore.privateMeta || new Uint8Array()
@@ -499,17 +490,7 @@ export class StoreClient {
      * @returns {Promise<void>} A promise that resolves when the Store update is complete.
      */
 
-    async storeUpdate(newStore: {
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        version: number;
-        options?: {
-            force?: boolean;
-            forceGenerateNewKey?: boolean;
-        };
-    }): Promise<void> {
+    async storeUpdate(newStore: UpdateStorePayload): Promise<void> {
         const api = await this.getApi();
 
         const meta = {

@@ -1,16 +1,9 @@
 import { EventDispatcher } from '../../EventDispatcher';
-import {
-    EndpointApiEvent,
-    FilesConfig,
-    Inbox,
-    InboxEntry,
-    ListOptions,
-    PagingList,
-    UserWithPubKey
-} from '../../types';
+import { EndpointApiEvent, Inbox, InboxEntry, ListOptions, PagingList } from '../../types';
 import { EventsByChannel, InboxEvents, SubscribeForChannel } from '../../types/events';
 import { InboxClient } from '../InboxClient';
 import { Endpoint } from '../Endpoint';
+import { CreateInboxPayload } from '../../types/inboxes';
 
 /**
  * Provides a wrapper for functions used to manage Inboxes in given Context.
@@ -51,14 +44,7 @@ export class ContextInboxes {
      * @returns {Promise<string>} Created Inbox ID
      */
 
-    async new(newInbox: {
-        contextId: string;
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        filesConfig?: FilesConfig;
-    }) {
+    async new(newInbox: CreateInboxPayload) {
         const api = await this._endpoint.getInboxApi();
 
         return await InboxClient.createInbox(api, {

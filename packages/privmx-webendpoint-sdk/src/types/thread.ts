@@ -1,3 +1,5 @@
+import { CreateContainerPayload, UpdateContainerPayload } from './generics';
+
 /**
  * Represents information about the location of given message on the server.
  */
@@ -196,3 +198,9 @@ export interface ThreadMessagePayload {
      */
     data: Uint8Array;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CreateThreadPayload extends CreateContainerPayload {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface UpdateThreadPayload extends UpdateContainerPayload {}

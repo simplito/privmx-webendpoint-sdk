@@ -3,13 +3,11 @@ import { StoreApi } from '../api/store/StoreApi';
 import { EventDispatcher } from '../EventDispatcher';
 import {
     EndpointApiEvent,
-    FilesConfig,
     Inbox,
     InboxEntry,
     InboxPublicView,
     ListOptions,
-    PagingList,
-    UserWithPubKey
+    PagingList
 } from '../types';
 import {
     Channel,
@@ -18,7 +16,7 @@ import {
     InboxEvents,
     SubscribeForChannel
 } from '../types/events';
-import { InboxEntryPayload } from '../types/inboxes';
+import { CreateInboxPayload, InboxEntryPayload, UpdateInboxPayload } from '../types/inboxes';
 import { InboxFileUploader } from './InboxFileUploader';
 import { Endpoint } from './Endpoint';
 import { FILE_MAX_CHUNK_SIZE } from '../utils/const';
@@ -61,17 +59,7 @@ export class InboxClient {
      * @param {FilesConfig} newInbox.filesConfig object to override default file configuration
      * @returns {Promise<string>} Created Inbox ID
      */
-    public static async createInbox(
-        api: InboxApi,
-        newInbox: {
-            contextId: string;
-            users: UserWithPubKey[];
-            managers: UserWithPubKey[];
-            publicMeta?: Uint8Array;
-            privateMeta?: Uint8Array;
-            filesConfig?: FilesConfig;
-        }
-    ): Promise<string> {
+    public static async createInbox(api: InboxApi, newInbox: CreateInboxPayload): Promise<string> {
         const meta = {
             publicMeta: newInbox.publicMeta || new Uint8Array(),
             privateMeta: newInbox.privateMeta || new Uint8Array()
@@ -156,18 +144,7 @@ export class InboxClient {
      * @param {boolean} [updatedData.options.forceGenerateNewKey] - optional flag to allow new users to access old data
      * @returns {Promise<void>}
      */
-    public async updateInbox(updatedData: {
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        filesConfig?: FilesConfig;
-        version: number;
-        options?: {
-            force?: boolean;
-            forceGenerateNewKey?: boolean;
-        };
-    }): Promise<void> {
+    public async updateInbox(updatedData: UpdateInboxPayload): Promise<void> {
         const api = await this.getApi();
 
         const meta = {

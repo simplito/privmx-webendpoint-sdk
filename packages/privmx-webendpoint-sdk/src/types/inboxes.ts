@@ -1,3 +1,4 @@
+import { CreateContainerPayload, UpdateContainerPayload } from './generics';
 import { PrivmxFile } from './store';
 
 /**
@@ -210,4 +211,12 @@ export interface InboxEntryPayload {
          */
         data: Uint8Array | File;
     }>;
+}
+
+export interface CreateInboxPayload extends CreateContainerPayload {
+    filesConfig?: FilesConfig;
+}
+
+export interface UpdateInboxPayload extends UpdateContainerPayload {
+    filesConfig?: FilesConfig;
 }

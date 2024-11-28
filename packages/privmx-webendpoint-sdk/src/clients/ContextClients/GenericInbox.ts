@@ -1,14 +1,6 @@
-import {
-    EndpointApiEvent,
-    FilesConfig,
-    Inbox,
-    InboxEntry,
-    ListOptions,
-    PagingList,
-    UserWithPubKey
-} from '../../types';
+import { EndpointApiEvent, Inbox, InboxEntry, ListOptions, PagingList } from '../../types';
 import { EventsByChannel, InboxEntryEvents, SubscribeForChannel } from '../../types/events';
-import { InboxEntryPayload } from '../../types/inboxes';
+import { InboxEntryPayload, UpdateInboxPayload } from '../../types/inboxes';
 import { InboxClient } from '../InboxClient';
 
 export class GenericInbox {
@@ -47,18 +39,7 @@ export class GenericInbox {
      * @param {boolean} [updatedData.options.forceGenerateNewKey] - optional flag to allow new users to access old data
      * @returns {Promise<void>} a promise that resolves with void
      */
-    async update(updatedData: {
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        filesConfig?: FilesConfig;
-        version: number;
-        options?: {
-            force?: boolean;
-            forceGenerateNewKey?: boolean;
-        };
-    }) {
+    async update(updatedData: UpdateInboxPayload) {
         return await this._inboxClient.updateInbox(updatedData);
     }
 
