@@ -2,7 +2,7 @@
 
 import { confirm, input } from '@inquirer/prompts';
 import { join, resolve as pathResolve } from 'path';
-import { readdir, rm } from 'node:fs/promises';
+import { rm } from 'node:fs/promises';
 import { existsSync, readFileSync, createWriteStream, renameSync, mkdirSync, rmSync } from 'fs';
 import { Readable } from 'stream';
 import * as cp from 'child_process';
@@ -11,7 +11,6 @@ import * as UUID from 'uuid';
 // @ts-ignore
 import AdmZip from 'adm-zip';
 import ora from 'ora';
-import { readdirSync } from 'node:fs';
 
 type ProjectType = {
     name: string;
