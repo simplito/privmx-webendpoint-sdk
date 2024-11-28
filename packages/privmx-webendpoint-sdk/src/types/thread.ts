@@ -1,3 +1,4 @@
+import { ContainerPolicy } from './core';
 import { CreateContainerPayload, UpdateContainerPayload } from './generics';
 
 /**
@@ -199,8 +200,10 @@ export interface ThreadMessagePayload {
     data: Uint8Array;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CreateThreadPayload extends CreateContainerPayload {}
+export interface CreateThreadPayload extends CreateContainerPayload {
+    policies?: ContainerPolicy;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface UpdateThreadPayload extends UpdateContainerPayload {}
+export interface UpdateThreadPayload extends UpdateContainerPayload {
+    policies?: ContainerPolicy;
+}

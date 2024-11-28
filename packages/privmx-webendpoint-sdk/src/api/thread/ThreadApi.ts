@@ -1,4 +1,5 @@
 import { UserWithPubKey, Message, PagingList, PagingQuery, Thread } from '../../types';
+import { ContainerPolicy } from '../../types/core';
 import { ThreadApiInterface } from './ThreadApiInterface';
 
 export class ThreadApi implements ThreadApiInterface {
@@ -12,7 +13,8 @@ export class ThreadApi implements ThreadApiInterface {
         privateMeta: Uint8Array,
         version: number,
         force: boolean,
-        forceGenerateNewKey: boolean
+        forceGenerateNewKey: boolean,
+        policies?: ContainerPolicy
     ): Promise<void> {
         return await this.api.updateThread(
             threadId,
@@ -22,7 +24,8 @@ export class ThreadApi implements ThreadApiInterface {
             privateMeta,
             version,
             force,
-            forceGenerateNewKey
+            forceGenerateNewKey,
+            policies
         );
     }
     async listThreads(contextId: string, query: PagingQuery): Promise<PagingList<Thread>> {
@@ -71,9 +74,17 @@ export class ThreadApi implements ThreadApiInterface {
         users: UserWithPubKey[],
         managers: UserWithPubKey[],
         publicMeta: Uint8Array,
-        privateMeta: Uint8Array
+        privateMeta: Uint8Array,
+        policies?: ContainerPolicy
     ): Promise<string> {
-        return await this.api.createThread(contextId, users, managers, publicMeta, privateMeta);
+        return await this.api.createThread(
+            contextId,
+            users,
+            managers,
+            publicMeta,
+            privateMeta,
+            policies
+        );
     }
 
     async deleteThread(threadId: string): Promise<void> {

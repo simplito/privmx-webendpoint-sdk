@@ -1,3 +1,4 @@
+import { ContainerPolicy } from './core';
 import { CreateContainerPayload, UpdateContainerPayload } from './generics';
 
 /**
@@ -204,8 +205,10 @@ export interface StoreFilePayload {
     data: Uint8Array;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CreateStorePayload extends CreateContainerPayload {}
+export interface CreateStorePayload extends CreateContainerPayload {
+    policies?: ContainerPolicy;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface UpdateStorePayload extends UpdateContainerPayload {}
+export interface UpdateStorePayload extends UpdateContainerPayload {
+    policies?: ContainerPolicy;
+}

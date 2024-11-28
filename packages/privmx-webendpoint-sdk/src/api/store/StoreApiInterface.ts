@@ -1,4 +1,5 @@
 import { PrivmxFile, PagingList, PagingQuery, Store, UserWithPubKey } from '../../types';
+import { ContainerPolicy } from '../../types/core';
 
 export interface StoreApiInterface {
     /**
@@ -8,6 +9,7 @@ export interface StoreApiInterface {
      * @param {UsersWithPubKey[]} managers - list of {@link UserWithPubKey `UserWithPubKey`} object which indicates who will have access (and management rights) to the created Store
      * @param {Uint8Array} publicMeta - (unencrypted) public metadata of the Store,
      * @param {Uint8Array} privateMeta - (encrypted) private metadata of the Store
+     * @param {ContainerPolicy} policies Store's policies
      * @returns {string} created Store ID.
      */
     createStore: (
@@ -15,7 +17,8 @@ export interface StoreApiInterface {
         users: UserWithPubKey[],
         managers: UserWithPubKey[],
         publicMeta: Uint8Array,
-        privateMeta: Uint8Array
+        privateMeta: Uint8Array,
+        policies?: ContainerPolicy
     ) => Promise<string>;
 
     /**
@@ -28,6 +31,7 @@ export interface StoreApiInterface {
      * @param {number} version - current version of the updated Store
      * @param {boolean} force - force update (without checking version)
      * @param {boolean} forceGenerateNewKey - force to re-generate a key for the Store
+     * @param {ContainerPolicy} policies Store's policies
      */
     updateStore: (
         storeId: string,
@@ -37,7 +41,8 @@ export interface StoreApiInterface {
         privateMeta: Uint8Array,
         version: number,
         force: boolean,
-        forceGenerateNewKey: boolean
+        forceGenerateNewKey: boolean,
+        policies?: ContainerPolicy
     ) => Promise<void>;
 
     /**

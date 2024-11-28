@@ -7,6 +7,7 @@ import {
     PagingList,
     PagingQuery
 } from '../../types';
+import { ContainerWithoutItemPolicy } from '../../types/core';
 import { InboxApiInterface } from './InboxApiInterface';
 
 /**
@@ -20,7 +21,8 @@ export class InboxApi implements InboxApiInterface {
         managers: UserWithPubKey[],
         publicMeta: Uint8Array,
         privateMeta: Uint8Array,
-        filesConfig: FilesConfig | undefined
+        filesConfig: FilesConfig | undefined,
+        policies?: ContainerWithoutItemPolicy
     ): Promise<string> {
         return await this.api.createInbox(
             contextId,
@@ -28,7 +30,8 @@ export class InboxApi implements InboxApiInterface {
             managers,
             publicMeta,
             privateMeta,
-            filesConfig
+            filesConfig,
+            policies
         );
     }
     async updateInbox(
@@ -40,7 +43,8 @@ export class InboxApi implements InboxApiInterface {
         filesConfig: FilesConfig | undefined,
         version: number,
         force: boolean,
-        forceGenerateNewKey: boolean
+        forceGenerateNewKey: boolean,
+        policies?: ContainerWithoutItemPolicy
     ): Promise<void> {
         return await this.api.updateInbox(
             inboxId,
@@ -51,7 +55,8 @@ export class InboxApi implements InboxApiInterface {
             filesConfig,
             version,
             force,
-            forceGenerateNewKey
+            forceGenerateNewKey,
+            policies
         );
     }
     async getInbox(inboxId: string): Promise<Inbox> {
