@@ -1,6 +1,7 @@
 import { EventDispatcher } from '../../EventDispatcher';
-import { ListOptions, Message, PagingList, Thread, UserWithPubKey } from '../../types';
+import { ListOptions, Message, PagingList, Thread } from '../../types';
 import { EventsByChannel, SubscribeForChannel, ThreadEvents } from '../../types/events';
+import { CreateThreadPayload } from '../../types/thread';
 import { Endpoint } from '../Endpoint';
 import { ThreadClient } from '../ThreadClient';
 
@@ -39,13 +40,7 @@ export class ContextThreads {
      * @param {Uint8Array} newThread.privateMeta - private metadata of the Thread
      * @returns {Promise<string>} - ID of created Thread
      */
-    async new(newThread: {
-        contextId: string;
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-    }): Promise<string> {
+    async new(newThread: CreateThreadPayload): Promise<string> {
         const api = await this._endpoint.getThreadApi();
         return await ThreadClient.createThread(api, {
             ...newThread

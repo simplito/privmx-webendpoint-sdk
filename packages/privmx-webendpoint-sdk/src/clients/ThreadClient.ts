@@ -1,13 +1,6 @@
 import { ThreadApi } from '../api/thread/ThreadApi';
 import { EventDispatcher } from '../EventDispatcher';
-import {
-    EndpointApiEvent,
-    ListOptions,
-    Message,
-    PagingList,
-    Thread,
-    UserWithPubKey
-} from '../types';
+import { EndpointApiEvent, ListOptions, Message, PagingList, Thread } from '../types';
 import {
     Channel,
     EventsByChannel,
@@ -16,7 +9,7 @@ import {
     ThreadMessageEvents
 } from '../types/events';
 import { Endpoint } from './Endpoint';
-import { ThreadMessagePayload } from '../types/thread';
+import { CreateThreadPayload, ThreadMessagePayload, UpdateThreadPayload } from '../types/thread';
 
 /**
  * Helper wrapper around raw Wasm bindings. Manages all the necessary IDs exposing high level Threads API.
@@ -62,13 +55,7 @@ export class ThreadClient {
      */
     static async createThread(
         threadApi: ThreadApi,
-        newThread: {
-            contextId: string;
-            users: UserWithPubKey[];
-            managers: UserWithPubKey[];
-            publicMeta?: Uint8Array;
-            privateMeta?: Uint8Array;
-        }
+        newThread: CreateThreadPayload
     ): Promise<string> {
         const meta = {
             publicMeta: newThread.publicMeta || new Uint8Array(),
@@ -143,17 +130,7 @@ export class ThreadClient {
      * @param {boolean} [updatedData.options.force] - optional flag to generate a new key ID for the Thread
      * @param {boolean} [updatedData.options.forceGenerateNewKey] - optional flag allowing new users to access old data
      */
-    async updateThread(updatedData: {
-        users: UserWithPubKey[];
-        managers: UserWithPubKey[];
-        publicMeta?: Uint8Array;
-        privateMeta?: Uint8Array;
-        version: number;
-        options?: {
-            force?: boolean;
-            forceGenerateNewKey?: boolean;
-        };
-    }) {
+    async updateThread(updatedData: UpdateThreadPayload) {
         const api = await this.getApi();
 
         const meta = {
