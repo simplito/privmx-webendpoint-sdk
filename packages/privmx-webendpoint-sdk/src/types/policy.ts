@@ -1,8 +1,8 @@
 /** Represents the inheritance options for policies */
-export type PolicyInheritance = 'inherit' | 'default' | 'none' | 'all';
+type PolicyInheritance = 'inherit' | 'default' | 'none' | 'all';
 
 /** Represents the single roles available for containers */
-export type SingleContainerRole = 'user' | 'manager' | 'owner';
+type SingleContainerRole = 'user' | 'manager' | 'owner';
 
 /** Represents the single roles available for items */
 export type SingleItemRole = 'user' | 'manager' | 'owner' | 'itemOwner';
@@ -11,25 +11,29 @@ export type SingleItemRole = 'user' | 'manager' | 'owner' | 'itemOwner';
 export type SingleRole = SingleItemRole;
 
 /**
- * Helper type for creating role combinations
+ * Helper type for creating unique role combinations
  * @template T - The base type for role combinations
  */
-export type RoleCombination<T extends string> = T | `${T}&${T}` | `${T},${T}` | `${T},${T}&${T}`;
+type UniqueRoleCombination<T extends string, U extends string = T> = T extends any
+    ? T | `${T}&${Exclude<U, T>}` | `${T},${UniqueRoleCombination<Exclude<U, T>>}`
+    : never;
 
 /** Represents valid role combinations for container policies */
-export type ContainerRoleCombination = RoleCombination<SingleContainerRole>;
+export type ContainerRoleCombination = UniqueRoleCombination<SingleContainerRole>;
 
 /** Represents valid role combinations for item policies with all roles */
-export type ItemRoleCombinationAll = RoleCombination<SingleItemRole>;
+export type ItemRoleCombinationAll = UniqueRoleCombination<SingleItemRole>;
 
 /** Represents valid role combinations for item policies without 'itemOwner' */
-export type ItemRoleCombinationNoItemOwner = RoleCombination<Exclude<SingleItemRole, 'itemOwner'>>;
+export type ItemRoleCombinationNoItemOwner = UniqueRoleCombination<
+    Exclude<SingleItemRole, 'itemOwner'>
+>;
 
 /** Represents the valid policy values for containers */
 export type ContainerPolicyValue = PolicyInheritance | ContainerRoleCombination;
 
 /** Represents the options for updater and owner removal policies */
-export type RemovalPolicy = 'inherit' | 'default' | 'yes' | 'no';
+type RemovalPolicy = 'inherit' | 'default' | 'yes' | 'no';
 
 /** Represents the valid policy values for items with all roles */
 export type ItemPolicyValueAll = PolicyInheritance | ItemRoleCombinationAll;
