@@ -7,9 +7,6 @@ type SingleContainerRole = 'user' | 'manager' | 'owner';
 /** Represents the single roles available for items */
 export type SingleItemRole = 'user' | 'manager' | 'owner' | 'itemOwner';
 
-/** Represents a single role (either container or item role) */
-export type SingleRole = SingleItemRole;
-
 /**
  * Helper type for creating unique role combinations
  * @template T - The base type for role combinations
