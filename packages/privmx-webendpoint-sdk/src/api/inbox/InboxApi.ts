@@ -7,7 +7,7 @@ import {
     PagingList,
     PagingQuery
 } from '../../types';
-import { ContainerWithoutItemPolicy } from '../../types/core';
+import { ContainerWithoutItemPolicy } from '../../types/policy';
 import { InboxApiInterface } from './InboxApiInterface';
 
 /**

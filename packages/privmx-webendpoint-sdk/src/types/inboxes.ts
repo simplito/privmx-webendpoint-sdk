@@ -1,4 +1,4 @@
-import { ContainerWithoutItemPolicy } from './core';
+import { ContainerWithoutItemPolicy } from './policy';
 import { CreateContainerPayload, UpdateContainerPayload } from './generics';
 import { PrivmxFile } from './store';
 

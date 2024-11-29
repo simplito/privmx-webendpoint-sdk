@@ -7,7 +7,7 @@ import {
     PagingQuery,
     UserWithPubKey
 } from '../../types';
-import { ContainerWithoutItemPolicy } from '../../types/core';
+import { ContainerWithoutItemPolicy } from '../../types/policy';
 
 export interface InboxApiInterface {
     /**

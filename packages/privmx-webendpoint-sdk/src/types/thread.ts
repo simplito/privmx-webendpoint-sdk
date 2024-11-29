@@ -1,4 +1,4 @@
-import { ContainerPolicy } from './core';
+import { ContainerPolicy } from './policy';
 import { CreateContainerPayload, UpdateContainerPayload } from './generics';
 
 /**

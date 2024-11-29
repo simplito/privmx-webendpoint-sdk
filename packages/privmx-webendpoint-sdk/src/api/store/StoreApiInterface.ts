@@ -1,5 +1,5 @@
 import { PrivmxFile, PagingList, PagingQuery, Store, UserWithPubKey } from '../../types';
-import { ContainerPolicy } from '../../types/core';
+import { ContainerPolicy } from '../../types/policy';
 
 export interface StoreApiInterface {
     /**

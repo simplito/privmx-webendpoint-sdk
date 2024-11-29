@@ -1,5 +1,5 @@
 import { UserWithPubKey, Message, PagingList, PagingQuery, Thread } from '../../types';
-import { ContainerPolicy } from '../../types/core';
+import { ContainerPolicy } from '../../types/policy';
 import { ThreadApiInterface } from './ThreadApiInterface';
 
 export class ThreadApi implements ThreadApiInterface {

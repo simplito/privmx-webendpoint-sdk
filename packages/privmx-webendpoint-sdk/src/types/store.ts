@@ -1,5 +1,5 @@
-import { ContainerPolicy } from './core';
 import { CreateContainerPayload, UpdateContainerPayload } from './generics';
+import { ContainerPolicy } from './policy';
 
 /**
  * Information about a file on the server.
