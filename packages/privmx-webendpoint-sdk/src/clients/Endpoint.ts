@@ -106,7 +106,7 @@ export class Endpoint {
         solutionId: string;
         label?: string;
     }): Promise<Endpoint> {
-        const coreApi = await EndpointFactoryProvider.platformConnect(
+        const coreApi = await EndpointFactoryProvider.connect(
             connectionConfig.privKey,
             connectionConfig.solutionId,
             connectionConfig.bridgeUrl
@@ -144,7 +144,7 @@ export class Endpoint {
         solutionId: string;
         label?: string;
     }) {
-        const coreApi = await EndpointFactoryProvider.platformConnectPublic(
+        const coreApi = await EndpointFactoryProvider.connectPublic(
             connectionConfig.solutionId,
             connectionConfig.bridgeUrl
         );
