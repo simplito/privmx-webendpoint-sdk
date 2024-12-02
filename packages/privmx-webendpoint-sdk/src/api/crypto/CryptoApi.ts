@@ -6,14 +6,6 @@ import { CryptoApiInterface } from './CryptoApiInterface';
 export class CryptoApi implements CryptoApiInterface {
     public constructor(private api: CryptoApiInterface) {}
 
-    async verifySignature(
-        data: Uint8Array,
-        signature: Uint8Array,
-        publicKey: string
-    ): Promise<boolean> {
-        return await this.api.verifySignature(data, signature, publicKey);
-    }
-
     async signData(data: Uint8Array, privKey: string): Promise<Uint8Array> {
         return await this.api.signData(data, privKey);
     }
@@ -28,8 +20,8 @@ export class CryptoApi implements CryptoApiInterface {
         return encrypted;
     }
 
-    async convertPEMKeyToWIFKey(keyPEM: string): Promise<string> {
-        return await this.api.convertPEMKeyToWIFKey(keyPEM);
+    async convertPEMKeytoWIFKey(keyPEM: string): Promise<string> {
+        return await this.api.convertPEMKeytoWIFKey(keyPEM);
     }
 
     async generatePrivateKey(baseString?: string): Promise<string> {
@@ -42,10 +34,6 @@ export class CryptoApi implements CryptoApiInterface {
 
     async derivePrivateKey(salt: string, password: string): Promise<string> {
         return await this.api.derivePrivateKey(salt, password);
-    }
-
-    async deriveKeySymmetric(password: string, salt: string): Promise<Uint8Array> {
-        return await this.api.deriveKeySymmetric(password, salt);
     }
 
     async generateKeySymmetric(): Promise<Uint8Array> {
