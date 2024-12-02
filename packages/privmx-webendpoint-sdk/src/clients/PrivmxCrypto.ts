@@ -19,79 +19,91 @@ export class PrivmxCrypto {
     }
 
     /**
-     * Decrypts given data using the provided key.
-     * @param {Uint8Array} data - data to decrypt
-     * @param {string} key - key to use for decryption
-     * @returns {Promise<string>} decrypted data
+     * Decrypts buffer with a given key using AES.
+     *
+     * @param {Uint8Array} data buffer to decrypt
+     * @param {Uint8Array} symmetricKey key used to decrypt data
+     * @returns {Uint8Array} plain (decrypted) data buffer
      */
-    static async decryptDataSymmetric(data: Uint8Array, key: Uint8Array): Promise<Uint8Array> {
+    static async decryptDataSymmetric(
+        data: Uint8Array,
+        symmetricKey: Uint8Array
+    ): Promise<Uint8Array> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const decrypted = await cryptoApi.decryptDataSymmetric(data, key);
+        const decrypted = await cryptoApi.decryptDataSymmetric(data, symmetricKey);
         return decrypted;
     }
 
     /**
-     * Encrypts given data using the provided key.
-     * @param {Uint8Array} data - data to encrypt
-     * @param {string} key - key to use for encryption
-     * @returns {Promise<string>} encrypted data
+     * Encrypts buffer with a given key using AES.
+     *
+     * @param {Uint8Array} data buffer to encrypt
+     * @param {Uint8Array} symmetricKey key used to encrypt data
+     * @returns {Uint8Array} encrypted data buffer
      */
-    static async encryptDataSymmetric(data: Uint8Array, key: Uint8Array): Promise<Uint8Array> {
+    static async encryptDataSymmetric(
+        data: Uint8Array,
+        symmetricKey: Uint8Array
+    ): Promise<Uint8Array> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const encrypted = await cryptoApi.encryptDataSymmetric(data, key);
+        const encrypted = await cryptoApi.encryptDataSymmetric(data, symmetricKey);
         return encrypted;
     }
-
     /**
-     * Converts a PEM key to WIF format.
-     * @param {string} keyPEM - PEM key to convert
-     * @returns {Promise<string>} WIF formatted key
+     * Converts given private key in PEM format to its WIF format.
+     *
+     * @param {string} pemKey private key to convert
+     * @returns {string} private key in WIF format
      */
-    static async convertPEMKeyToWIFKey(keyPEM: string): Promise<string> {
+    static async convertPEMKeytoWIFKey(pemKey: string): Promise<string> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const wifKey = await cryptoApi.convertPEMKeyToWIFKey(keyPEM);
+        const wifKey = await cryptoApi.convertPEMKeytoWIFKey(pemKey);
         return wifKey;
     }
 
     /**
-     * Generates a new private key.
-     * @param {string} [baseString] - optional base string to use for key generation
-     * @returns {Promise<string>} generated private key
+     * Generates a new private ECC key.
+     *
+     * @param {string} [randomSeed] optional string used as the base to generate the new key
+     * @returns {string} generated ECC key in WIF format
      */
-    static async generatePrivateKey(baseString?: string): Promise<string> {
+    static async generatePrivateKey(randomSeed?: string): Promise<string> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const privKey = await cryptoApi.generatePrivateKey(baseString);
+        const privKey = await cryptoApi.generatePrivateKey(randomSeed);
         return privKey;
     }
 
     /**
-     * Generates a new public key from given private key.
-     * @param {string} privKey - private key to use for generating the public key
-     * @returns {Promise<string>} generated public key
+     * Generates a new public ECC key as a pair to an existing private key.
+     * @param {string} privateKey private ECC key in WIF format
+     * @returns {string} generated ECC key in BASE58DER format
      */
-    static async derivePublicKey(privKey: string): Promise<string> {
+    static async derivePublicKey(privateKey: string): Promise<string> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const pubKey = await cryptoApi.derivePublicKey(privKey);
+        const pubKey = await cryptoApi.derivePublicKey(privateKey);
         return pubKey;
     }
 
     /**
-     * Signs given data using the provided private key.
-     * @param {Uint8Array} data - data to sign
-     * @param {string} privKey - private key to use for signing
-     * @returns {Promise<string>} signature
+     * Creates a signature of data using given key.
+     *
+     * @param {Uint8Array} data buffer to sign
+     * @param {string} privateKey key used to sign data
+     * @returns {Uint8Array} signature
      */
-    static async signData(data: Uint8Array, privKey: string): Promise<Uint8Array> {
+    static async signData(data: Uint8Array, privateKey: string): Promise<Uint8Array> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const signature = await cryptoApi.signData(data, privKey);
+        const signature = await cryptoApi.signData(data, privateKey);
         return signature;
     }
 
     /**
-     * Generates a new private key using PBKDF2.
-     * @param {string} salt - salt to use for key generation
-     * @param {string} password - password to use for key generation
-     * @returns {Promise<string>} generated private key
+     * Generates a new private ECC key from a password using pbkdf2.
+     *
+     * @param {string} password the password used to generate the new key
+     * @param {string} salt random string (additional input for the hashing function)
+
+     * @returns {string} generated ECC key in WIF format
      */
     static async derivePrivateKey(salt: string, password: string): Promise<string> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
@@ -100,44 +112,12 @@ export class PrivmxCrypto {
     }
 
     /**
-     * Derives a symmetric key from a password and salt using a key derivation function.
-     *
-     * @param {string} password - input password used to derive the key
-     * @param {string} salt - a unique string used to ensure that the same password generates different keys
-     *
-     * @returns {Promise<Uint8Array>} generated derived key
-     *
-     */
-    static async deriveKeySymmetric(password: string, salt: string): Promise<Uint8Array> {
-        const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        const key = await cryptoApi.deriveKeySymmetric(salt, password);
-        return key;
-    }
-
-    /**
-     * Generates a new symmetric key signData a `Uint8Array`.
-     * This function uses a cryptographic algorithm to create a secure random key.
-     *
-     * @returns {Promise<Uint8Array>} generated symmetric key
-     *
+     * Generates a new symmetric key.
+     * @returns {Uint8Array} generated key.
      */
     static async generateKeySymmetric(): Promise<Uint8Array> {
         const cryptoApi = await PrivmxCrypto.getCryptoApi();
         const key = await cryptoApi.generateKeySymmetric();
         return key;
-    }
-
-    /**
-     * Validate a signature of data using given key.
-     *
-     * @param data buffer
-     * @param signature tof data
-     * @param publicKey public ECC key in BASE58DER format used to validate data
-     * @return validated data
-     */
-
-    static async verifySignature(data: Uint8Array, signature: Uint8Array, publicKey: string) {
-        const cryptoApi = await PrivmxCrypto.getCryptoApi();
-        return cryptoApi.verifySignature(data, signature, publicKey);
     }
 }
