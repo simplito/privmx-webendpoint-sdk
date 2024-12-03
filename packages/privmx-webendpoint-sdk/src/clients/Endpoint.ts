@@ -81,6 +81,13 @@ export class Endpoint {
         this._defaultConnectionId = id;
     }
 
+    /**
+     * @returns {string} ID of current connection
+     */
+    public getConnectionId(): string {
+        return this._connectionId;
+    }
+
     constructor(
         private _coreApi: Connection,
         connectionId: string,
