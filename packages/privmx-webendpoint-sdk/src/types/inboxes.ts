@@ -1,3 +1,4 @@
+import { ContainerWithoutItemPolicy } from './policy';
 import { CreateContainerPayload, UpdateContainerPayload } from './generics';
 import { PrivmxFile } from './store';
 
@@ -215,8 +216,10 @@ export interface InboxEntryPayload {
 
 export interface CreateInboxPayload extends CreateContainerPayload {
     filesConfig?: FilesConfig;
+    policies?: ContainerWithoutItemPolicy;
 }
 
 export interface UpdateInboxPayload extends UpdateContainerPayload {
     filesConfig?: FilesConfig;
+    policies?: ContainerWithoutItemPolicy;
 }

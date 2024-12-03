@@ -7,6 +7,7 @@ import {
     PagingQuery,
     UserWithPubKey
 } from '../../types';
+import { ContainerWithoutItemPolicy } from '../../types/policy';
 
 export interface InboxApiInterface {
     /**
@@ -16,7 +17,8 @@ export interface InboxApiInterface {
      * @param {UserWithPubKey[]} managers - list of {@link UserWithPubKey `UserWithPubKey`} objects  which indicates who will have access (and management rights) to the created Inbox
      * @param {Uint8Array} publicMeta - (unencrypted) public Inbox metadata
      * @param {Uint8Array} privateMeta - (encrypted) private Inbox metadata
-     * @param {FilesConfig} filesConfig object to override default file configuration
+     * @param {FilesConfig} filesConfig object to override default file configuration,
+     * @param {ContainerWithoutItemPolicy} policies Inbox policies
      * @returns {string} Created Inbox ID
      */
     createInbox: (
@@ -25,7 +27,8 @@ export interface InboxApiInterface {
         managers: UserWithPubKey[],
         publicMeta: Uint8Array,
         privateMeta: Uint8Array,
-        filesConfig: FilesConfig | undefined
+        filesConfig: FilesConfig | undefined,
+        policies?: ContainerWithoutItemPolicy
     ) => Promise<string>;
 
     /**
@@ -38,7 +41,8 @@ export interface InboxApiInterface {
      * @param {FilesConfig | undefined} filesConfig object to override default file configuration. Provide undefined if you want to leave the default configuration.
      * @param {number} version current version of the updated Inbox
      * @param {boolean} force  force update (without checking version)
-     * @param {boolean} forceGenerateNewKey force to regenerate a key for the Inbox
+     * @param {boolean} forceGenerateNewKey force to regenerate a key for the Inbox,
+     * @param {ContainerWithoutItemPolicy} policies Inbox policies
      * @returns void
      */
     updateInbox: (
@@ -50,7 +54,8 @@ export interface InboxApiInterface {
         filesConfig: FilesConfig | undefined,
         version: number,
         force: boolean,
-        forceGenerateNewKey: boolean
+        forceGenerateNewKey: boolean,
+        policies?: ContainerWithoutItemPolicy
     ) => Promise<void>;
 
     /**

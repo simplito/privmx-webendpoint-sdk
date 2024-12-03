@@ -1,4 +1,5 @@
 import { PrivmxFile, PagingList, PagingQuery, Store, UserWithPubKey } from '../../types';
+import { ContainerPolicy } from '../../types/policy';
 import { StoreApiInterface } from './StoreApiInterface';
 
 export class StoreApi implements StoreApiInterface {
@@ -25,9 +26,17 @@ export class StoreApi implements StoreApiInterface {
         users: UserWithPubKey[],
         managers: UserWithPubKey[],
         publicMeta: Uint8Array,
-        privateMeta: Uint8Array
+        privateMeta: Uint8Array,
+        policies?: ContainerPolicy
     ): Promise<string> {
-        return await this.api.createStore(contextId, users, managers, publicMeta, privateMeta);
+        return await this.api.createStore(
+            contextId,
+            users,
+            managers,
+            publicMeta,
+            privateMeta,
+            policies
+        );
     }
 
     async updateStore(
@@ -38,7 +47,8 @@ export class StoreApi implements StoreApiInterface {
         privateMeta: Uint8Array,
         version: number,
         force: boolean,
-        forceGenerateNewKey: boolean
+        forceGenerateNewKey: boolean,
+        policies?: ContainerPolicy
     ): Promise<void> {
         return await this.api.updateStore(
             storeId,
@@ -48,7 +58,8 @@ export class StoreApi implements StoreApiInterface {
             privateMeta,
             version,
             force,
-            forceGenerateNewKey
+            forceGenerateNewKey,
+            policies
         );
     }
 

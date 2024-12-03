@@ -1,4 +1,5 @@
 import { Message, PagingList, PagingQuery, Thread, UserWithPubKey } from '../../types';
+import { ContainerPolicy } from '../../types/policy';
 
 export interface ThreadApiInterface {
     /**
@@ -9,6 +10,7 @@ export interface ThreadApiInterface {
      * @param {UserWithPubKey[]} managers - list of {@link UserWithPubKey `UserWithPubKey`} objects  which indicates who will have access (and management rights) to the created Thread
      * @param {Uint8Array} publicMeta public (unencrypted) metadata
      * @param {Uint8Array} privateMeta (encrypted) metadata
+     * @param {ContainerPolicy} policies Thread's policies
      * @returns {Promise<string>} String created Thread ID.
      *
      */
@@ -17,7 +19,8 @@ export interface ThreadApiInterface {
         users: UserWithPubKey[],
         managers: UserWithPubKey[],
         publicMeta: Uint8Array,
-        privateMeta: Uint8Array
+        privateMeta: Uint8Array,
+        policies?: ContainerPolicy
     ) => Promise<string>;
 
     /**
@@ -30,6 +33,7 @@ export interface ThreadApiInterface {
      * @param {number} version - current version of the updated Thread
      * @param {boolean} force - force update (without checking version)
      * @param {boolean} forceGenerateNewKey - force to re-generate a key for the Thread
+     * @param {ContainerPolicy} policies Thread's policies
      * @returns {Promise<void>} a promise that resolves with void
      */
     updateThread: (
@@ -40,7 +44,8 @@ export interface ThreadApiInterface {
         privateMeta: Uint8Array,
         version: number,
         force: boolean,
-        forceGenerateNewKey: boolean
+        forceGenerateNewKey: boolean,
+        policies?: ContainerPolicy
     ) => Promise<void>;
 
     /**
