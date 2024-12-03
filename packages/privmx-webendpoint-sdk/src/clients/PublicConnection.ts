@@ -26,4 +26,11 @@ export class PublicConnection {
     async getInboxPublicView(inboxId: string): Promise<InboxPublicView> {
         return await new InboxClient(inboxId, this.platform, new EventDispatcher()).getPublicView();
     }
+
+    /**
+     * Disconnects user from the Bridge.
+     */
+    async disconnect() {
+        return await this.platform.disconnect();
+    }
 }
