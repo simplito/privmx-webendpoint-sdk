@@ -17,3 +17,4 @@
 *.tgz
 .
 /.pnpmrc
+**/.npmrc
