@@ -159,7 +159,11 @@ async function choseDestFolder() {
 
 async function setupNext(destinationFolder: string) {
     console.log('\n-- Paste following script tags in to your root layout <head> tag --');
-    const withoutPublic = destinationFolder.replace('/public', '');
+    let withoutPublic = destinationFolder.replace('/public', '');
+
+    if (withoutPublic.startsWith('.')) {
+        withoutPublic = withoutPublic.slice(1);
+    }
 
     console.log(`\x1b[34m
 <Script src="${withoutPublic}/privmx-endpoint-web.js"></Script>
@@ -199,7 +203,11 @@ export default nextConfig;
 
 async function setupVite(destinationFolder: string) {
     console.log('\n-- Paste following script tags in to your index.html <head> tag --');
-    const withoutPublic = destinationFolder.replace('/public', '');
+    let withoutPublic = destinationFolder.replace('/public', '');
+
+    if (withoutPublic.startsWith('.')) {
+        withoutPublic = withoutPublic.slice(1);
+    }
 
     console.log(`\x1b[34m
 <script src="${withoutPublic}/privmx-endpoint-web.js"></script>
