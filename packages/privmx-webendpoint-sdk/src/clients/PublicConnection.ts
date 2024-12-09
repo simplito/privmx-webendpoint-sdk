@@ -10,6 +10,13 @@ export class PublicConnection {
     constructor(private platform: Endpoint) {}
 
     /**
+     * @returns {string} ID of current connection
+     */
+    public getConnectionId(): string {
+        return this.platform.getConnectionId();
+    }
+
+    /**
      * Sends data and optional files to an Inbox.
      * @param {string} inboxId  ID of Inbox to send the entry to
      * @param {InboxEntryPayload} entry {@link InboxEntryPayload `InboxEntryPayload`} object
