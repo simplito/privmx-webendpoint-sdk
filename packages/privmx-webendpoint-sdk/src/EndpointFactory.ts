@@ -6,13 +6,9 @@ import { StoreApi } from './api/store/StoreApi';
 import { ThreadApi } from './api/thread/ThreadApi';
 
 export declare class EndpointFactory {
-    static platformConnect: (
-        privKey: string,
-        solutionId: string,
-        bridgeUrl: string
-    ) => Promise<Connection>;
+    static connect: (privKey: string, solutionId: string, bridgeUrl: string) => Promise<Connection>;
 
-    static platformConnectPublic: (solutionId: string, bridgeUrl: string) => Promise<Connection>;
+    static connectPublic: (solutionId: string, bridgeUrl: string) => Promise<Connection>;
 
     static createThreadApi: (coreApi: Connection) => Promise<ThreadApi>;
 
@@ -66,13 +62,13 @@ export class EndpointFactoryProvider {
      * @param {string} bridgeUrl Bridge URL
      * @returns {Connection} returns a {@link Connection `Connection` instance}
      */
-    static async platformConnect(
+    static async connect(
         privKey: string,
         solutionId: string,
         bridgeUrl: string
     ): Promise<Connection> {
         await this.ensureApiFactoryReady();
-        return await EndpointFactory.platformConnect(privKey, solutionId, bridgeUrl);
+        return await EndpointFactory.connect(privKey, solutionId, bridgeUrl);
     }
 
     /**
@@ -81,9 +77,9 @@ export class EndpointFactoryProvider {
      * @param {string} bridgeUrl Bridge URL
      * @returns {Promise<Connection>} returns a promise that resolves with a {@link Connection `Connection`} instance
      */
-    static async platformConnectPublic(solutionId: string, bridgeUrl: string): Promise<Connection> {
+    static async connectPublic(solutionId: string, bridgeUrl: string): Promise<Connection> {
         await this.ensureApiFactoryReady();
-        return await EndpointFactory.platformConnectPublic(solutionId, bridgeUrl);
+        return await EndpointFactory.connectPublic(solutionId, bridgeUrl);
     }
 
     /**
