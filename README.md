@@ -1,4 +1,7 @@
 # PrivMX Web Endpoint SDK
+## Note
+
+This project is **deprecated**, please refer to [Web Endpoint](https://github.com/simplito/privmx-webendpoint) if you're interested in web projects.
 
 ## Overview
 
